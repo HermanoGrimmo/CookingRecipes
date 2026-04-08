@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Führt PHPStan auf Level 8 mit der Projektkonfiguration aus.
+# Nutzung:
+#   bin/analyse               → statische Analyse ausführen
+#   bin/analyse src/Service   → nur bestimmten Pfad analysieren
+
+set -euo pipefail
+
+PROJECT_DIR="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+docker compose -f "$PROJECT_DIR/docker-compose.yml" exec -T php \
+    vendor/bin/phpstan analyse \
+    --configuration=phpstan.dist.neon \
+    "$@"

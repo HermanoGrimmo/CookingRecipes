@@ -49,6 +49,7 @@ class Step
     public function setNumber(int $number): static
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -60,6 +61,7 @@ class Step
     public function setTitle(?string $title): static
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -71,6 +73,7 @@ class Step
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -82,6 +85,7 @@ class Step
     public function setRecipe(?Recipe $recipe): static
     {
         $this->recipe = $recipe;
+
         return $this;
     }
 }

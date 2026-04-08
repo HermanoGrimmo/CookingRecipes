@@ -96,6 +96,7 @@ class Recipe
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -107,6 +108,7 @@ class Recipe
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -118,6 +120,7 @@ class Recipe
     public function setAuthor(string $author): static
     {
         $this->author = $author;
+
         return $this;
     }
 
@@ -129,6 +132,7 @@ class Recipe
     public function setImagePath(?string $imagePath): static
     {
         $this->imagePath = $imagePath;
+
         return $this;
     }
 
@@ -140,6 +144,7 @@ class Recipe
     public function setServings(int $servings): static
     {
         $this->servings = $servings;
+
         return $this;
     }
 
@@ -151,6 +156,7 @@ class Recipe
     public function setPrepTime(int $prepTime): static
     {
         $this->prepTime = $prepTime;
+
         return $this;
     }
 
@@ -162,6 +168,7 @@ class Recipe
     public function setCookTime(int $cookTime): static
     {
         $this->cookTime = $cookTime;
+
         return $this;
     }
 
@@ -179,6 +186,7 @@ class Recipe
     public function setDifficulty(string $difficulty): static
     {
         $this->difficulty = $difficulty;
+
         return $this;
     }
 
@@ -190,6 +198,7 @@ class Recipe
     public function setRating(string $rating): static
     {
         $this->rating = $rating;
+
         return $this;
     }
 
@@ -201,6 +210,7 @@ class Recipe
     public function setRatingCount(int $ratingCount): static
     {
         $this->ratingCount = $ratingCount;
+
         return $this;
     }
 
@@ -221,6 +231,7 @@ class Recipe
             $this->ingredients->add($ingredient);
             $ingredient->setRecipe($this);
         }
+
         return $this;
     }
 
@@ -236,6 +247,7 @@ class Recipe
             $this->steps->add($step);
             $step->setRecipe($this);
         }
+
         return $this;
     }
 }

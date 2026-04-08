@@ -56,6 +56,7 @@ class Ingredient
     public function setAmount(?string $amount): static
     {
         $this->amount = $amount;
+
         return $this;
     }
 
@@ -67,6 +68,7 @@ class Ingredient
     public function setUnit(?string $unit): static
     {
         $this->unit = $unit;
+
         return $this;
     }
 
@@ -78,6 +80,7 @@ class Ingredient
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -89,6 +92,7 @@ class Ingredient
     public function setGroupName(?string $groupName): static
     {
         $this->groupName = $groupName;
+
         return $this;
     }
 
@@ -100,6 +104,7 @@ class Ingredient
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
         return $this;
     }
 
@@ -111,6 +116,7 @@ class Ingredient
     public function setRecipe(?Recipe $recipe): static
     {
         $this->recipe = $recipe;
+
         return $this;
     }
 }

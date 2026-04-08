@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Öffnet eine Shell im laufenden PHP-Container oder führt einen Befehl darin aus.
+# Nutzung:
+#   bin/php              → interaktive Shell
+#   bin/php php -v       → einzelnen Befehl ausführen
+
+set -euo pipefail
+
+CONTAINER_SERVICE="php"
+COMPOSE_FILE="$(dirname "$(dirname "$(readlink -f "$0")")")/docker-compose.yml"
+
+if [ $# -eq 0 ]; then
+    docker compose -f "$COMPOSE_FILE" exec "$CONTAINER_SERVICE" sh
+else
+    docker compose -f "$COMPOSE_FILE" exec "$CONTAINER_SERVICE" "$@"
+fi

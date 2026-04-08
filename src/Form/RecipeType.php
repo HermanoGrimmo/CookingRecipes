@@ -16,6 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
 
+/** @extends AbstractType<Recipe> */
 class RecipeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -60,8 +61,8 @@ class RecipeType extends AbstractType
                 'label' => 'Schwierigkeitsgrad',
                 'choices' => [
                     'Einfach' => 'einfach',
-                    'Mittel'  => 'mittel',
-                    'Schwer'  => 'schwer',
+                    'Mittel' => 'mittel',
+                    'Schwer' => 'schwer',
                 ],
                 'attr' => ['class' => 'input'],
             ])

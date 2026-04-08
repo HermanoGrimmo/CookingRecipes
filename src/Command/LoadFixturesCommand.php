@@ -136,10 +136,10 @@ class LoadFixturesCommand extends Command
         }
 
         $lasagneSteps = [
-            ['Ragù Bolognese', "Öl erhitzen, Hackfleisch darin krümelig anbraten, den Knoblauch dazu pressen. Zwiebeln und Karotte sehr fein schneiden oder raspeln und mit dem geschälten Tomaten und Tomatenmark dazu geben, salzen und pfeffern. Mit den Gewürzen abschmecken. Etwas Wasser dazu geben und mindestens 30 Minuten köcheln lassen."],
-            ['Béchamelsauce', "Butter in einem kleinen Topf schmelzen und das Mehl mit dem Schneebesen einrühren und verrühren. Die Milch dazugeben und die Sauce unter ständigem Rühren einmal aufkochen lassen. Mit Salz, Pfeffer und Muskatnuss würzen."],
-            ['Zusammenbau der Lasagne', "In eine gefettete, feuerfeste Form etwas Ragù Bolognese verteilen, eine Schicht Lasagneblätter darauflegen, dann eine Schicht Béchamelsauce, dann wieder Bolognese. Schicht für Schicht so weitermachen. Die letzte Schicht sollte die Béchamelsauce bilden. Dick mit geriebenem Käse bestreuen und mit Butterflöckchen belegen."],
-            ['Backen', "Die Lasagne im heißen Backofen bei 180°C Umluft ca. 30-40 Minuten backen, bis die Kruste goldbraun ist."],
+            ['Ragù Bolognese', 'Öl erhitzen, Hackfleisch darin krümelig anbraten, den Knoblauch dazu pressen. Zwiebeln und Karotte sehr fein schneiden oder raspeln und mit dem geschälten Tomaten und Tomatenmark dazu geben, salzen und pfeffern. Mit den Gewürzen abschmecken. Etwas Wasser dazu geben und mindestens 30 Minuten köcheln lassen.'],
+            ['Béchamelsauce', 'Butter in einem kleinen Topf schmelzen und das Mehl mit dem Schneebesen einrühren und verrühren. Die Milch dazugeben und die Sauce unter ständigem Rühren einmal aufkochen lassen. Mit Salz, Pfeffer und Muskatnuss würzen.'],
+            ['Zusammenbau der Lasagne', 'In eine gefettete, feuerfeste Form etwas Ragù Bolognese verteilen, eine Schicht Lasagneblätter darauflegen, dann eine Schicht Béchamelsauce, dann wieder Bolognese. Schicht für Schicht so weitermachen. Die letzte Schicht sollte die Béchamelsauce bilden. Dick mit geriebenem Käse bestreuen und mit Butterflöckchen belegen.'],
+            ['Backen', 'Die Lasagne im heißen Backofen bei 180°C Umluft ca. 30-40 Minuten backen, bis die Kruste goldbraun ist.'],
         ];
 
         foreach ($lasagneSteps as $i => $data) {

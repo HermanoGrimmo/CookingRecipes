@@ -1,0 +1,26 @@
+name: Code Style
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  php-cs-fixer:
+    name: PHP CS Fixer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PHP einrichten
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: cs2pr
+
+      - name: Composer-Abhängigkeiten installieren
+        run: composer install --no-progress --prefer-dist
+
+      - name: PHP CS Fixer ausführen
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --format=checkstyle | cs2pr

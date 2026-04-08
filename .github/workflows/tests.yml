@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PHP einrichten
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_pgsql
+
+      - name: Composer-Abhängigkeiten installieren
+        run: composer install --no-progress --prefer-dist
+
+      - name: Datenbank-Schema erstellen
+        run: php bin/console doctrine:schema:create --env=test
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
+
+      - name: PHPUnit ausführen
+        run: vendor/bin/phpunit
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
