@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Neues Rezept – CookingRecipes{% endblock %}
+
+{% block body %}
+<div class="form-page">
+    <div class="container">
+        <div class="form-page-header">
+            <a href="{{ path('recipe_index') }}" class="back-link">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Alle Rezepte
+            </a>
+            <h1 class="form-page-title">Neues Rezept erstellen</h1>
+            <p class="form-page-subtitle">Fülle das Formular aus, um ein neues Rezept anzulegen.</p>
+        </div>
+
+        {% include 'recipe/_form.html.twig' with {
+            back_url: path('recipe_index'),
+            submit_label: 'Rezept speichern'
+        } %}
+    </div>
+</div>
+{% endblock %}
+
+{% block body_js %}
+    {{ include('recipe/_form_js.html.twig') }}
+{% endblock %}

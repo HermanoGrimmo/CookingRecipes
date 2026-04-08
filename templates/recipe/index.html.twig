@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rezepte - CookingRecipes{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <div class="container">
+        <h1>Unsere Rezepte</h1>
+        <p class="hero-subtitle">Entdecke leckere Gerichte zum Nachkochen</p>
+    </div>
+</section>
+
+<section class="recipes-grid container">
+    {% if recipes is empty %}
+        <div class="empty-state">
+            <span class="empty-icon">📖</span>
+            <h2>Noch keine Rezepte vorhanden</h2>
+            <p>Bald findest du hier leckere Rezepte zum Nachkochen.</p>
+        </div>
+    {% else %}
+        <div class="grid">
+            {% for recipe in recipes %}
+                <a href="{{ path('recipe_show', {id: recipe.id}) }}" class="recipe-card">
+                    <div class="card-image">
+                        {% if recipe.imagePath %}
+                            <img src="{{ recipe.imagePath }}" alt="{{ recipe.title }}" loading="lazy">
+                        {% else %}
+                            <div class="card-image-placeholder">🍽️</div>
+                        {% endif %}
+                        <span class="card-badge">{{ recipe.difficulty }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title">{{ recipe.title }}</h2>
+                        {% if recipe.description %}
+                            <p class="card-description">{{ recipe.description|length > 100 ? recipe.description|slice(0, 100) ~ '...' : recipe.description }}</p>
+                        {% endif %}
+                        <div class="card-meta">
+                            <div class="card-rating">
+                                {% set fullStars = recipe.rating|round(0, 'floor') %}
+                                {% for i in 1..5 %}
+                                    {% if i <= fullStars %}
+                                        <span class="star filled">★</span>
+                                    {% else %}
+                                        <span class="star">★</span>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="rating-count">({{ recipe.ratingCount }})</span>
+                            </div>
+                            <div class="card-time">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                {{ recipe.totalTime }} Min.
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <span class="card-author">von {{ recipe.author }}</span>
+                            <span class="card-servings">{{ recipe.servings }} Portionen</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

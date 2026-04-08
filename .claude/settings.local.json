@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(docker run:*)",
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"c:/Projekte/Claude/CookingRecipes:/app\" -w /app composer:2 create-project symfony/skeleton . --no-interaction)",
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"c:/Projekte/Claude:/workspace\" -w /workspace composer:2 create-project symfony/skeleton symfony_tmp --no-interaction)",
+      "Bash(curl -s -o /dev/null -w \"HTTP Status: %{http_code}\" http://localhost:8090)"
+    ]
+  }
+}

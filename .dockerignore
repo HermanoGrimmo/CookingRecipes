@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# Docker-Konfiguration selbst nicht ins Image kopieren
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# Symfony Laufzeit-Daten
+var/cache
+var/log
+
+# Entwicklungs-Abhängigkeiten und Tools
+vendor
+node_modules
+.env.local
+.env.*.local
+
+# IDE und OS
+.idea
+.vscode
+*.DS_Store
+Thumbs.db
+
+# Tests (nicht in Produktions-Image)
+tests
+phpunit.xml*
+.phpunit.cache

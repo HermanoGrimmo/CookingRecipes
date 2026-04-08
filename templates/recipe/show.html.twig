@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recipe.title }} - CookingRecipes{% endblock %}
+
+{% block body %}
+<article class="recipe-detail">
+    {# Hero-Bereich #}
+    <div class="recipe-hero">
+        <div class="container recipe-hero-nav">
+            <a href="{{ path('recipe_index') }}" class="back-link">
+                <svg width="18" height="18" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Alle Rezepte
+            </a>
+            <a href="{{ path('recipe_edit', {id: recipe.id}) }}" class="btn btn-secondary btn-sm">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Bearbeiten
+            </a>
+        </div>
+        {% if recipe.imagePath %}
+            <img src="{{ recipe.imagePath }}" alt="{{ recipe.title }}" class="recipe-hero-image">
+        {% else %}
+            <div class="recipe-hero-placeholder">🍽️</div>
+        {% endif %}
+    </div>
+
+    <div class="container recipe-content">
+        {# Kopfbereich #}
+        <header class="recipe-header">
+            <span class="difficulty-badge difficulty-{{ recipe.difficulty }}">{{ recipe.difficulty }}</span>
+            <h1>{{ recipe.title }}</h1>
+
+            {% if recipe.description %}
+                <p class="recipe-description">{{ recipe.description }}</p>
+            {% endif %}
+
+            <div class="recipe-author">
+                <div class="author-avatar">{{ recipe.author|first|upper }}</div>
+                <span>{{ recipe.author }}</span>
+            </div>
+
+            {# Bewertung #}
+            <div class="recipe-rating">
+                {% set fullStars = recipe.rating|round(0, 'floor') %}
+                {% for i in 1..5 %}
+                    {% if i <= fullStars %}
+                        <span class="star filled">★</span>
+                    {% else %}
+                        <span class="star">★</span>
+                    {% endif %}
+                {% endfor %}
+                <span class="rating-value">{{ recipe.rating }}</span>
+                <span class="rating-count">({{ recipe.ratingCount }} Bewertungen)</span>
+            </div>
+
+            {# Zeitangaben-Karten #}
+            <div class="time-cards">
+                <div class="time-card">
+                    <svg width="22" height="22" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <span class="time-value">{{ recipe.prepTime }} Min.</span>
+                    <span class="time-label">Zubereitung</span>
+                </div>
+                <div class="time-card">
+                    <svg width="22" height="22" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 110 8h-1"/><path d="M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+                    <span class="time-value">{{ recipe.cookTime }} Min.</span>
+                    <span class="time-label">Kochzeit</span>
+                </div>
+                <div class="time-card highlight">
+                    <svg width="22" height="22" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <span class="time-value">{{ recipe.totalTime }} Min.</span>
+                    <span class="time-label">Gesamt</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="recipe-body">
+            {# Zutaten-Bereich #}
+            <section class="ingredients-section">
+                <h2>Zutaten</h2>
+                <div class="servings-control" data-default-servings="{{ recipe.servings }}">
+                    <button class="btn-servings" data-action="decrease" aria-label="Weniger Portionen">−</button>
+                    <span class="servings-display">
+                        <span class="servings-value">{{ recipe.servings }}</span> Portionen
+                    </span>
+                    <button class="btn-servings" data-action="increase" aria-label="Mehr Portionen">+</button>
+                </div>
+
+                {% set currentGroup = null %}
+                <ul class="ingredients-list">
+                    {% for ingredient in recipe.ingredients %}
+                        {% if ingredient.groupName != currentGroup %}
+                            {% set currentGroup = ingredient.groupName %}
+                            {% if currentGroup %}
+                                <li class="ingredient-group-header">{{ currentGroup }}</li>
+                            {% endif %}
+                        {% endif %}
+                        <li class="ingredient-item">
+                            <span class="ingredient-amount" data-base-amount="{{ ingredient.amount }}">{{ ingredient.amount }}</span>
+                            <span class="ingredient-unit">{{ ingredient.unit }}</span>
+                            <span class="ingredient-name">{{ ingredient.name }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            {# Zubereitungsschritte #}
+            <section class="steps-section">
+                <h2>Zubereitung</h2>
+                <ol class="steps-list">
+                    {% for step in recipe.steps %}
+                        <li class="step-item">
+                            <div class="step-number">{{ step.number }}</div>
+                            <div class="step-content">
+                                {% if step.title %}
+                                    <h3 class="step-title">{{ step.title }}</h3>
+                                {% endif %}
+                                <p>{{ step.description|nl2br }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </section>
+        </div>
+    </div>
+</article>
+{% endblock %}
+
+{% block body_js %}
+<script>
+    // Portionsrechner
+    document.addEventListener('DOMContentLoaded', () => {
+        const control = document.querySelector('.servings-control');
+        if (!control) return;
+
+        const defaultServings = parseInt(control.dataset.defaultServings, 10);
+        const display = control.querySelector('.servings-value');
+        const amounts = document.querySelectorAll('.ingredient-amount');
+
+        let currentServings = defaultServings;
+
+        control.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+
+            if (btn.dataset.action === 'increase') {
+                currentServings++;
+            } else if (btn.dataset.action === 'decrease' && currentServings > 1) {
+                currentServings--;
+            }
+
+            display.textContent = currentServings;
+            const factor = currentServings / defaultServings;
+
+            amounts.forEach(el => {
+                const base = parseFloat(el.dataset.baseAmount);
+                if (isNaN(base)) return;
+                const scaled = Math.round(base * factor * 100) / 100;
+                // Ganzzahlen ohne Dezimalstellen anzeigen
+                el.textContent = scaled % 1 === 0 ? scaled.toString() : scaled.toFixed(1);
+            });
+        });
+    });
+</script>
+{% endblock %}
