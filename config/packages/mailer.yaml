@@ -1,0 +1,7 @@
+framework:
+    mailer:
+        dsn: '%env(MAILER_DSN)%'
+        envelope:
+            sender: 'noreply@cookingrecipes.local'
+        headers:
+            from: 'CookingRecipes <noreply@cookingrecipes.local>'
