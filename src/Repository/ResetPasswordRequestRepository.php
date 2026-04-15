@@ -30,6 +30,7 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
     /**
      * Erstellt eine neue ResetPasswordRequest-Instanz.
      * Muss manuell implementiert werden, da der Trait die konkrete Entity-Klasse nicht kennt.
+     * Die Signatur erzwingt object (Interface-Vorgabe); intern wird ein User erwartet.
      */
     public function createResetPasswordRequest(
         object $user,
@@ -37,7 +38,9 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
         string $selector,
         string $hashedToken,
     ): ResetPasswordRequestInterface {
-        \assert($user instanceof User);
+        if (!$user instanceof User) {
+            throw new \InvalidArgumentException(\sprintf('Erwartet wird ein User-Objekt, erhalten: %s', $user::class));
+        }
 
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
     }

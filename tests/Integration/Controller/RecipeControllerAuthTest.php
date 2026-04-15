@@ -107,6 +107,60 @@ class RecipeControllerAuthTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /** Eigenes Rezept löschen ist für den Ersteller erlaubt. */
+    public function testDeleteOwnRecipeAllowedForOwner(): void
+    {
+        $client = static::createClient();
+
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+
+        $owner = $this->createTestUser($em, 'owner4@example.com');
+        $recipe = $this->createTestRecipe($em, $owner);
+
+        $client->loginUser($owner);
+        // denyAccessUnlessGranted feuert vor der CSRF-Prüfung; ein Redirect beweist, dass der Zugriff erlaubt wurde.
+        $client->request('POST', '/rezept/' . $recipe->getId() . '/loeschen', ['_token' => 'dummy']);
+
+        $this->assertResponseRedirects('/');
+    }
+
+    /** Fremdes Rezept löschen führt zu 403 Forbidden. */
+    public function testDeleteForeignRecipeReturnsForbidden(): void
+    {
+        $client = static::createClient();
+
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+
+        $owner = $this->createTestUser($em, 'owner5@example.com');
+        $otherUser = $this->createTestUser($em, 'other2@example.com');
+        $recipe = $this->createTestRecipe($em, $owner);
+
+        $client->loginUser($otherUser);
+        $client->request('POST', '/rezept/' . $recipe->getId() . '/loeschen', ['_token' => 'dummy']);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    /** Admin darf fremde Rezepte löschen. */
+    public function testAdminCanDeleteAnyRecipe(): void
+    {
+        $client = static::createClient();
+
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+
+        $owner = $this->createTestUser($em, 'owner6@example.com');
+        $admin = $this->createTestUser($em, 'admin2@example.com', ['ROLE_ADMIN']);
+        $recipe = $this->createTestRecipe($em, $owner);
+
+        $client->loginUser($admin);
+        $client->request('POST', '/rezept/' . $recipe->getId() . '/loeschen', ['_token' => 'dummy']);
+
+        $this->assertResponseRedirects('/');
+    }
+
     /**
      * Erstellt einen Test-User und gibt ihn zurück.
      *
