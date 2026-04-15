@@ -63,6 +63,7 @@ class PasswordResetService
     {
         $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
+        $this->em->persist($user);
         $this->em->flush();
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -11,6 +12,19 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class RegistrationControllerTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $connection = $em->getConnection();
+
+        // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM reset_password_request');
+        $connection->executeStatement('DELETE FROM app_user');
+
+        parent::tearDown();
+    }
+
     /** Die Registrierungsseite ist öffentlich zugänglich und zeigt ein Formular. */
     public function testRegisterPageIsAccessible(): void
     {
@@ -52,7 +66,8 @@ class RegistrationControllerTest extends WebTestCase
             'registration_form[plainPassword][second]' => 'kurz',
         ]);
 
-        $this->assertResponseIsSuccessful(); // Kein Redirect = Formular mit Fehler
-        $this->assertSelectorExists('.form-error, [class*="error"]');
+        // Symfony gibt HTTP 422 bei Validierungsfehlern zurück (kein Redirect = Formular mit Fehler)
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertSelectorTextContains('ul li', 'mindestens 8 Zeichen');
     }
 }

@@ -14,6 +14,22 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class RecipeControllerAuthTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        /** @var EntityManagerInterface $em */
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $connection = $em->getConnection();
+
+        // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM ingredient');
+        $connection->executeStatement('DELETE FROM step');
+        $connection->executeStatement('DELETE FROM recipe');
+        $connection->executeStatement('DELETE FROM reset_password_request');
+        $connection->executeStatement('DELETE FROM app_user');
+
+        parent::tearDown();
+    }
+
     /** Unauthentifizierter Zugriff auf /rezept/neu wird zu /anmelden umgeleitet. */
     public function testNewRecipeRedirectsToLoginWhenNotAuthenticated(): void
     {

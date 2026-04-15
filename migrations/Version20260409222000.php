@@ -19,6 +19,8 @@ final class Version20260409222000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        // HINWEIS: Das Standard-Passwort "admin" muss nach dem ersten Deployment
+        // umgehend über die Anwendung geändert werden.
         // Passwort wird zur Migrationszeit mit bcrypt gehasht
         $hashedPassword = password_hash('admin', \PASSWORD_BCRYPT);
 

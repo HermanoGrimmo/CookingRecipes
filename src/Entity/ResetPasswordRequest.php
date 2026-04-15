@@ -25,7 +25,7 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
 
     /** Der Benutzer, für den der Reset-Token ausgestellt wurde */
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
     public function __construct(User $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)

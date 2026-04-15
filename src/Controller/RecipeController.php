@@ -41,7 +41,9 @@ class RecipeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Eingeloggten Benutzer als Eigentümer setzen
             $user = $this->getUser();
-            \assert($user instanceof User);
+            if (!$user instanceof User) {
+                throw new \LogicException('Kein eingeloggter Benutzer vorhanden – denyAccessUnlessGranted hätte dies verhindern müssen.');
+            }
             $recipe->setOwner($user);
             $recipe->setAuthor($user->getFullName());
 
