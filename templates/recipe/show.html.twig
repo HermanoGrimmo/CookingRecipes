@@ -115,7 +115,7 @@
                                 {% if step.title %}
                                     <h3 class="step-title">{{ step.title }}</h3>
                                 {% endif %}
-                                <p>{{ step.description|nl2br }}</p>
+                                <p>{{ step.description|escape|nl2br }}</p>
                             </div>
                         </li>
                     {% endfor %}

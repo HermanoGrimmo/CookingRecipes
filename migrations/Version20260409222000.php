@@ -19,10 +19,15 @@ final class Version20260409222000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // HINWEIS: Das Standard-Passwort "admin" muss nach dem ersten Deployment
-        // umgehend über die Anwendung geändert werden.
-        // Passwort wird zur Migrationszeit mit bcrypt gehasht
-        $hashedPassword = password_hash('admin', \PASSWORD_BCRYPT);
+        // Passwort wird aus der Umgebungsvariable ADMIN_INITIAL_PASSWORD gelesen
+        // und zur Migrationszeit mit bcrypt gehasht. Beispiel:
+        //   ADMIN_INITIAL_PASSWORD=geheimesPasswort php bin/console doctrine:migrations:migrate
+        $plainPassword = $_ENV['ADMIN_INITIAL_PASSWORD']
+            ?? throw new \RuntimeException(
+                'Die Umgebungsvariable ADMIN_INITIAL_PASSWORD muss gesetzt sein, bevor diese Migration ausgeführt wird.'
+            );
+
+        $hashedPassword = password_hash($plainPassword, \PASSWORD_BCRYPT);
 
         $this->addSql(
             'INSERT INTO app_user (email, first_name, last_name, roles, password, created_at)
