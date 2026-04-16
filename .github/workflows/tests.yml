@@ -41,10 +41,10 @@ jobs:
         run: php bin/console doctrine:schema:create --env=test
         env:
           APP_ENV: test
-          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
+          DATABASE_URL: postgresql://app:app@localhost:5432/app?serverVersion=17
 
       - name: PHPUnit ausführen
         run: vendor/bin/phpunit
         env:
           APP_ENV: test
-          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
+          DATABASE_URL: postgresql://app:app@localhost:5432/app?serverVersion=17

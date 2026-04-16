@@ -22,10 +22,11 @@ final class Version20260409222000 extends AbstractMigration
         // Passwort wird aus der Umgebungsvariable ADMIN_INITIAL_PASSWORD gelesen
         // und zur Migrationszeit mit bcrypt gehasht. Beispiel:
         //   ADMIN_INITIAL_PASSWORD=geheimesPasswort php bin/console doctrine:migrations:migrate
-        $plainPassword = $_ENV['ADMIN_INITIAL_PASSWORD']
-            ?? throw new \RuntimeException(
-                'Die Umgebungsvariable ADMIN_INITIAL_PASSWORD muss gesetzt sein, bevor diese Migration ausgeführt wird.'
-            );
+        if (empty($_ENV['ADMIN_INITIAL_PASSWORD'])) {
+            throw new \RuntimeException('Die Umgebungsvariable ADMIN_INITIAL_PASSWORD muss gesetzt sein, bevor diese Migration ausgeführt wird.');
+        }
+
+        $plainPassword = (string) $_ENV['ADMIN_INITIAL_PASSWORD'];
 
         $hashedPassword = password_hash($plainPassword, \PASSWORD_BCRYPT);
 
