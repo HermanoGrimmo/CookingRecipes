@@ -243,6 +243,14 @@ class Recipe
         return $this;
     }
 
+    public function removeIngredient(Ingredient $ingredient): static
+    {
+        // orphanRemoval: true sorgt dafür, dass die Zutat beim nächsten flush gelöscht wird
+        $this->ingredients->removeElement($ingredient);
+
+        return $this;
+    }
+
     /** @return Collection<int, Step> */
     public function getSteps(): Collection
     {
@@ -255,6 +263,14 @@ class Recipe
             $this->steps->add($step);
             $step->setRecipe($this);
         }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): static
+    {
+        // orphanRemoval: true sorgt dafür, dass der Schritt beim nächsten flush gelöscht wird
+        $this->steps->removeElement($step);
 
         return $this;
     }
