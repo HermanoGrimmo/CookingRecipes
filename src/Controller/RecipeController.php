@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\User;
 use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
+use App\Security\RecipeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +32,21 @@ class RecipeController extends AbstractController
     #[Route('/rezept/neu', name: 'recipe_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Eingeloggten Benutzer als Eigentümer setzen
+            $user = $this->getUser();
+            if (!$user instanceof User) {
+                throw new \LogicException('Kein eingeloggter Benutzer vorhanden – denyAccessUnlessGranted hätte dies verhindern müssen.');
+            }
+            $recipe->setOwner($user);
+            $recipe->setAuthor($user->getFullName());
+
             $this->fixIngredientPositions($recipe);
             $this->fixStepNumbers($recipe);
             $em->persist($recipe);
@@ -61,6 +73,8 @@ class RecipeController extends AbstractController
     #[Route('/rezept/{id}/bearbeiten', name: 'recipe_edit', requirements: ['id' => '\d+'])]
     public function edit(Request $request, Recipe $recipe, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted(RecipeVoter::EDIT, $recipe);
+
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
@@ -83,6 +97,8 @@ class RecipeController extends AbstractController
     #[Route('/rezept/{id}/loeschen', name: 'recipe_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, Recipe $recipe, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted(RecipeVoter::DELETE, $recipe);
+
         if ($this->isCsrfTokenValid('delete_' . $recipe->getId(), (string) $request->request->get('_token'))) {
             $em->remove($recipe);
             $em->flush();

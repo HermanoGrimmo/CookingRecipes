@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anmelden - CookingRecipes{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-icon">🍳</span>
+            <h1 class="auth-title">Willkommen zurück</h1>
+            <p class="auth-subtitle">Melde dich an, um Rezepte zu erstellen und zu bearbeiten</p>
+        </div>
+
+        {% if error %}
+            <div class="flash flash-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="form-group">
+                <label for="_email" class="form-label">E-Mail-Adresse</label>
+                <input type="email" id="_email" name="_email"
+                       value="{{ last_username }}"
+                       class="input"
+                       placeholder="max@beispiel.de"
+                       autocomplete="email"
+                       autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="_password" class="form-label">Passwort</label>
+                <input type="password" id="_password" name="_password"
+                       class="input"
+                       placeholder="Dein Passwort"
+                       autocomplete="current-password">
+            </div>
+
+            <div class="auth-forgot">
+                <a href="{{ path('app_forgot_password_request') }}">Passwort vergessen?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Anmelden</button>
+        </form>
+
+        <p class="auth-link">
+            Noch kein Konto? <a href="{{ path('security_register') }}">Jetzt registrieren</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

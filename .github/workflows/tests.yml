@@ -40,9 +40,11 @@ jobs:
       - name: Datenbank-Schema erstellen
         run: php bin/console doctrine:schema:create --env=test
         env:
-          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
+          APP_ENV: test
+          DATABASE_URL: postgresql://app:app@localhost:5432/app?serverVersion=17
 
       - name: PHPUnit ausführen
         run: vendor/bin/phpunit
         env:
-          DATABASE_URL: postgresql://app:app@localhost:5432/app_test?serverVersion=17
+          APP_ENV: test
+          DATABASE_URL: postgresql://app:app@localhost:5432/app?serverVersion=17

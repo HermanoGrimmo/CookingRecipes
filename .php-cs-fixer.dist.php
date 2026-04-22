@@ -13,6 +13,7 @@ $finder = (new PhpCsFixer\Finder())
     ->exclude('var')
     ->exclude('vendor')
     ->exclude('docker')
+    ->notPath('config/reference.php') // Automatisch von Symfony generiert – nicht anpassen
 ;
 
 return (new PhpCsFixer\Config())

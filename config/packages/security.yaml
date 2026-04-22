@@ -1,0 +1,43 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                enable_csrf: true
+                csrf_token_id: authenticate
+                default_target_path: recipe_index
+                username_parameter: _email
+                password_parameter: _password
+            logout:
+                path: security_logout
+                target: recipe_index
+                csrf_token_id: logout
+
+    access_control:
+        - { path: ^/anmelden,     roles: PUBLIC_ACCESS }
+        - { path: ^/registrieren, roles: PUBLIC_ACCESS }
+        - { path: ^/passwort,     roles: PUBLIC_ACCESS }
+        - { path: ^/rezept/neu,   roles: ROLE_USER }
+
+when@test:
+    security:
+        password_hashers:
+            App\Entity\User:
+                algorithm: plaintext

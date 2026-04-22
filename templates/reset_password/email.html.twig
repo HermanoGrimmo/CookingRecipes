@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Passwort zurücksetzen – CookingRecipes</title>
+</head>
+<body style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2 style="color: #e85d26;">CookingRecipes – Passwort zurücksetzen</h2>
+
+    <p>Hallo {{ userName }},</p>
+
+    <p>
+        du hast eine Anfrage zum Zurücksetzen deines Passworts gestellt.
+        Klicke auf den folgenden Link, um ein neues Passwort zu setzen:
+    </p>
+
+    <p style="text-align: center; margin: 30px 0;">
+        <a href="{{ resetUrl }}"
+           style="background-color: #e85d26; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+            Passwort zurücksetzen
+        </a>
+    </p>
+
+    <p style="color: #666; font-size: 0.9em;">
+        Dieser Link ist <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData) }}</strong> gültig.
+    </p>
+
+    <p style="color: #666; font-size: 0.9em;">
+        Falls du diese Anfrage nicht gestellt hast, kannst du diese E-Mail ignorieren. Dein Passwort bleibt unverändert.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+    <p style="color: #999; font-size: 0.8em;">CookingRecipes</p>
+</body>
+</html>

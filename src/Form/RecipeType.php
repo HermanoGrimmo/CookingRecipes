@@ -32,11 +32,6 @@ class RecipeType extends AbstractType
                 'required' => false,
                 'attr' => ['placeholder' => 'Kurze Beschreibung des Rezepts…', 'rows' => 3, 'class' => 'input'],
             ])
-            ->add('author', TextType::class, [
-                'label' => 'Autor',
-                'attr' => ['placeholder' => 'Dein Name', 'class' => 'input'],
-                'constraints' => [new NotBlank(message: 'Bitte einen Autorennamen eingeben.')],
-            ])
             ->add('imagePath', TextType::class, [
                 'label' => 'Bild-URL',
                 'required' => false,

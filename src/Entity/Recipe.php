@@ -76,6 +76,14 @@ class Recipe
     #[ORM\OrderBy(['number' => 'ASC'])]
     private Collection $steps;
 
+    /**
+     * Der Benutzer, der das Rezept erstellt hat.
+     * Wird auf NULL gesetzt, wenn der Benutzer gelöscht wird (Rezept bleibt erhalten).
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?User $owner = null;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
@@ -235,6 +243,14 @@ class Recipe
         return $this;
     }
 
+    public function removeIngredient(Ingredient $ingredient): static
+    {
+        // orphanRemoval: true sorgt dafür, dass die Zutat beim nächsten flush gelöscht wird
+        $this->ingredients->removeElement($ingredient);
+
+        return $this;
+    }
+
     /** @return Collection<int, Step> */
     public function getSteps(): Collection
     {
@@ -247,6 +263,26 @@ class Recipe
             $this->steps->add($step);
             $step->setRecipe($this);
         }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): static
+    {
+        // orphanRemoval: true sorgt dafür, dass der Schritt beim nächsten flush gelöscht wird
+        $this->steps->removeElement($step);
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
