@@ -1,0 +1,90 @@
+<div{{ attributes }}>
+    <div class="recipe-filter">
+        <div class="filter-search">
+            <label for="recipe-search" class="visually-hidden">Suche</label>
+            <input
+                type="search"
+                id="recipe-search"
+                class="input"
+                placeholder="Rezept suchen…"
+                data-model="debounce(300)|search"
+                value="{{ search }}"
+            >
+        </div>
+
+        <div class="filter-controls">
+            <label class="filter-label">
+                Schwierigkeit
+                <select class="input" data-model="difficulty">
+                    <option value="">Alle</option>
+                    <option value="einfach">Einfach</option>
+                    <option value="mittel">Mittel</option>
+                    <option value="schwer">Schwer</option>
+                </select>
+            </label>
+
+            <label class="filter-label">
+                Sortierung
+                <select class="input" data-model="sortBy">
+                    <option value="newest">Neueste zuerst</option>
+                    <option value="oldest">Älteste zuerst</option>
+                    <option value="title">Titel (A–Z)</option>
+                    <option value="time">Kürzeste Zeit</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    {% set recipes = this.recipes %}
+    <section class="recipes-grid">
+        {% if recipes is empty %}
+            <div class="empty-state">
+                <span class="empty-icon">📖</span>
+                <h2>Keine Rezepte gefunden</h2>
+                <p>Versuche, die Filter anzupassen oder einen anderen Suchbegriff zu verwenden.</p>
+            </div>
+        {% else %}
+            <div class="grid">
+                {% for recipe in recipes %}
+                    <a href="{{ path('recipe_show', {id: recipe.id}) }}" class="recipe-card">
+                        <div class="card-image">
+                            {% if recipe.imagePath %}
+                                <img src="{{ recipe.imagePath }}" alt="{{ recipe.title }}" loading="lazy">
+                            {% else %}
+                                <div class="card-image-placeholder">🍽️</div>
+                            {% endif %}
+                            <span class="card-badge">{{ recipe.difficulty }}</span>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title">{{ recipe.title }}</h2>
+                            {% if recipe.description %}
+                                <p class="card-description">{{ recipe.description|length > 100 ? recipe.description|slice(0, 100) ~ '...' : recipe.description }}</p>
+                            {% endif %}
+                            <div class="card-meta">
+                                <div class="card-rating">
+                                    {% set fullStars = recipe.rating|round(0, 'floor') %}
+                                    {% for i in 1..5 %}
+                                        {% if i <= fullStars %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">★</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rating-count">({{ recipe.ratingCount }})</span>
+                                </div>
+                                <div class="card-time">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                    {{ recipe.totalTime }} Min.
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-author">von {{ recipe.author }}</span>
+                                <span class="card-servings">{{ recipe.servings }} Portionen</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+</div>
