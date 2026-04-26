@@ -133,6 +133,45 @@ a { color: inherit; text-decoration: none; }
     opacity: .9;
 }
 
+/* --- Recipe Filter (Live Component) ---------------------- */
+.recipe-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: end;
+    padding: 32px 0 0;
+}
+
+.filter-search {
+    flex: 1 1 280px;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    color: var(--color-text-muted, #666);
+    gap: 4px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* --- Recipe Grid ---------------------------------------- */
 .recipes-grid { padding: 48px 0 64px; }
 

@@ -75,34 +75,8 @@
         </header>
 
         <div class="recipe-body">
-            {# Zutaten-Bereich #}
-            <section class="ingredients-section">
-                <h2>Zutaten</h2>
-                <div class="servings-control" data-default-servings="{{ recipe.servings }}">
-                    <button class="btn-servings" data-action="decrease" aria-label="Weniger Portionen">−</button>
-                    <span class="servings-display">
-                        <span class="servings-value">{{ recipe.servings }}</span> Portionen
-                    </span>
-                    <button class="btn-servings" data-action="increase" aria-label="Mehr Portionen">+</button>
-                </div>
-
-                {% set currentGroup = null %}
-                <ul class="ingredients-list">
-                    {% for ingredient in recipe.ingredients %}
-                        {% if ingredient.groupName != currentGroup %}
-                            {% set currentGroup = ingredient.groupName %}
-                            {% if currentGroup %}
-                                <li class="ingredient-group-header">{{ currentGroup }}</li>
-                            {% endif %}
-                        {% endif %}
-                        <li class="ingredient-item">
-                            <span class="ingredient-amount" data-base-amount="{{ ingredient.amount }}">{{ ingredient.amount }}</span>
-                            <span class="ingredient-unit">{{ ingredient.unit }}</span>
-                            <span class="ingredient-name">{{ ingredient.name }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </section>
+            {# Zutaten-Bereich (Live Component für reaktiven Portionsrechner) #}
+            <twig:ServingsCalculator :recipe="recipe" :currentServings="recipe.servings" />
 
             {# Zubereitungsschritte #}
             <section class="steps-section">
@@ -126,40 +100,3 @@
 </article>
 {% endblock %}
 
-{% block body_js %}
-<script>
-    // Portionsrechner
-    document.addEventListener('DOMContentLoaded', () => {
-        const control = document.querySelector('.servings-control');
-        if (!control) return;
-
-        const defaultServings = parseInt(control.dataset.defaultServings, 10);
-        const display = control.querySelector('.servings-value');
-        const amounts = document.querySelectorAll('.ingredient-amount');
-
-        let currentServings = defaultServings;
-
-        control.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-action]');
-            if (!btn) return;
-
-            if (btn.dataset.action === 'increase') {
-                currentServings++;
-            } else if (btn.dataset.action === 'decrease' && currentServings > 1) {
-                currentServings--;
-            }
-
-            display.textContent = currentServings;
-            const factor = currentServings / defaultServings;
-
-            amounts.forEach(el => {
-                const base = parseFloat(el.dataset.baseAmount);
-                if (isNaN(base)) return;
-                const scaled = Math.round(base * factor * 100) / 100;
-                // Ganzzahlen ohne Dezimalstellen anzeigen
-                el.textContent = scaled % 1 === 0 ? scaled.toString() : scaled.toFixed(1);
-            });
-        });
-    });
-</script>
-{% endblock %}

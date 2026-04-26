@@ -1,0 +1,21 @@
+<script>
+// Bild-URL-Vorschau für das Rezept-Formular.
+// (Das Hinzufügen/Entfernen von Zutaten und Schritten übernimmt jetzt die RecipeForm Live Component.)
+document.addEventListener('DOMContentLoaded', () => {
+    const imageInput = document.querySelector('input[name$="[imagePath]"]');
+    if (!imageInput) return;
+
+    const preview = document.createElement('div');
+    preview.className = 'image-preview';
+    imageInput.after(preview);
+
+    const render = () => {
+        const url = imageInput.value.trim();
+        preview.innerHTML = url
+            ? `<img src="${url}" alt="Vorschau" onerror="this.style.display='none'">`
+            : '';
+    };
+    render();
+    imageInput.addEventListener('input', render);
+});
+</script>

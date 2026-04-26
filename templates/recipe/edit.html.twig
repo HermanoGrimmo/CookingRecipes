@@ -14,10 +14,11 @@
             <p class="form-page-subtitle">Ändere die Details von <strong>{{ recipe.title }}</strong>.</p>
         </div>
 
-        {% include 'recipe/_form.html.twig' with {
-            back_url: path('recipe_show', {id: recipe.id}),
-            submit_label: 'Änderungen speichern'
-        } %}
+        <twig:RecipeForm
+            :initialFormData="recipe"
+            backUrl="{{ path('recipe_show', {id: recipe.id}) }}"
+            submitLabel="Änderungen speichern"
+        />
 
         {# Rezept löschen #}
         <div class="danger-zone">
@@ -37,5 +38,5 @@
 {% endblock %}
 
 {% block body_js %}
-    {{ include('recipe/_form_js.html.twig') }}
+    {{ include('recipe/_image_preview_js.html.twig') }}
 {% endblock %}

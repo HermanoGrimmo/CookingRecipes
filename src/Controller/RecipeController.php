@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Recipe;
-use App\Entity\User;
-use App\Form\RecipeType;
-use App\Repository\RecipeRepository;
 use App\Security\RecipeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,48 +14,28 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Controller für die Rezeptverwaltung (Übersicht, Detail, Neu, Bearbeiten).
+ *
+ * Das Erstellen und Bearbeiten von Rezepten wird vom RecipeForm Live Component
+ * übernommen – die Controller-Actions rendern lediglich die Seiten und
+ * übergeben das Recipe-Objekt an die Komponente.
  */
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'recipe_index')]
-    public function index(RecipeRepository $recipeRepository): Response
+    public function index(): Response
     {
-        return $this->render('recipe/index.html.twig', [
-            'recipes' => $recipeRepository->findAllOrderedByNewest(),
-        ]);
+        // Das eigentliche Rendern der Liste übernimmt das RecipeList Live Component.
+        return $this->render('recipe/index.html.twig');
     }
 
     /** Muss VOR recipe_show stehen, damit "neu" nicht als ID interpretiert wird. */
     #[Route('/rezept/neu', name: 'recipe_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $recipe = new Recipe();
-        $form = $this->createForm(RecipeType::class, $recipe);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Eingeloggten Benutzer als Eigentümer setzen
-            $user = $this->getUser();
-            if (!$user instanceof User) {
-                throw new \LogicException('Kein eingeloggter Benutzer vorhanden – denyAccessUnlessGranted hätte dies verhindern müssen.');
-            }
-            $recipe->setOwner($user);
-            $recipe->setAuthor($user->getFullName());
-
-            $this->fixIngredientPositions($recipe);
-            $this->fixStepNumbers($recipe);
-            $em->persist($recipe);
-            $em->flush();
-
-            $this->addFlash('success', 'Rezept wurde erfolgreich erstellt!');
-
-            return $this->redirectToRoute('recipe_show', ['id' => $recipe->getId()]);
-        }
-
         return $this->render('recipe/new.html.twig', [
-            'form' => $form,
+            'recipe' => new Recipe(),
         ]);
     }
 
@@ -71,25 +48,11 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/rezept/{id}/bearbeiten', name: 'recipe_edit', requirements: ['id' => '\d+'])]
-    public function edit(Request $request, Recipe $recipe, EntityManagerInterface $em): Response
+    public function edit(Recipe $recipe): Response
     {
         $this->denyAccessUnlessGranted(RecipeVoter::EDIT, $recipe);
 
-        $form = $this->createForm(RecipeType::class, $recipe);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->fixIngredientPositions($recipe);
-            $this->fixStepNumbers($recipe);
-            $em->flush();
-
-            $this->addFlash('success', 'Rezept wurde erfolgreich aktualisiert!');
-
-            return $this->redirectToRoute('recipe_show', ['id' => $recipe->getId()]);
-        }
-
         return $this->render('recipe/edit.html.twig', [
-            'form' => $form,
             'recipe' => $recipe,
         ]);
     }
@@ -106,21 +69,5 @@ class RecipeController extends AbstractController
         }
 
         return $this->redirectToRoute('recipe_index');
-    }
-
-    /** Setzt die Position der Zutaten basierend auf ihrer Reihenfolge im Formular. */
-    private function fixIngredientPositions(Recipe $recipe): void
-    {
-        foreach ($recipe->getIngredients() as $index => $ingredient) {
-            $ingredient->setPosition($index);
-        }
-    }
-
-    /** Setzt die Schrittnummern basierend auf ihrer Reihenfolge im Formular. */
-    private function fixStepNumbers(Recipe $recipe): void
-    {
-        foreach ($recipe->getSteps() as $index => $step) {
-            $step->setNumber($index + 1);
-        }
     }
 }
