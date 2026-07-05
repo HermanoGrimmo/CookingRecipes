@@ -66,6 +66,8 @@ class RecipeController extends AbstractController
             $em->remove($recipe);
             $em->flush();
             $this->addFlash('success', 'Rezept wurde gelöscht.');
+        } else {
+            $this->addFlash('error', 'Das Rezept konnte nicht gelöscht werden (ungültiges Sicherheits-Token). Bitte versuche es erneut.');
         }
 
         return $this->redirectToRoute('recipe_index');

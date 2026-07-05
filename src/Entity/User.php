@@ -91,7 +91,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        \assert('' !== $this->email);
+        // Explizite Prüfung statt assert() – Assertions sind in Produktion deaktiviert.
+        if ('' === $this->email) {
+            throw new \LogicException('Der Benutzer hat keine E-Mail-Adresse gesetzt.');
+        }
 
         return $this->email;
     }

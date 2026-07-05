@@ -47,6 +47,17 @@ config/             # Symfony-Konfiguration
 public/             # Web-Root (index.php)
 ```
 
+## Asset-Pipeline & Docker
+
+- **Frontend-Assets:** Webpack Encore (`webpack.config.js`, Quellen unter `assets/`, Build nach `public/build/`)
+- **Symfony UX:** Live Components (`src/Twig/Components/` + `templates/components/`) mit Stimulus-Bridge
+- **Docker:** Die Anwendung läuft komplett in Containern (`docker-compose.yml`: `php`, `nginx`, `postgres`, `mailpit`, `node`)
+- **Wrapper-Skripte** (führen Befehle im jeweiligen Container aus):
+  - `bin/npm.sh <args>` – npm im Node-Container (z. B. `bin/npm.sh install`)
+  - `bin/encore.sh dev [--watch]` – Encore-Build im Node-Container
+  - `bin/qa.sh` – CS-Fixer, PHPStan und PHPUnit im PHP-Container
+- **Mail (dev):** Mailpit-UI auf Port 8025; `MAILER_DSN` nutzt den Service-Namen `mailpit`, nicht `localhost`
+
 ## Hinweise für Claude
 
 - Immer `declare(strict_types=1);` an den Anfang neuer PHP-Dateien setzen

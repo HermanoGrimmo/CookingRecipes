@@ -11,9 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const render = () => {
         const url = imageInput.value.trim();
-        preview.innerHTML = url
-            ? `<img src="${url}" alt="Vorschau" onerror="this.style.display='none'">`
-            : '';
+        // DOM-API statt innerHTML: verhindert Markup-/Script-Injektion über die eingegebene URL.
+        preview.replaceChildren();
+        if (url) {
+            const img = document.createElement('img');
+            img.alt = 'Vorschau';
+            img.addEventListener('error', () => { img.style.display = 'none'; });
+            img.src = url;
+            preview.append(img);
+        }
     };
     render();
     imageInput.addEventListener('input', render);
