@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -46,6 +47,9 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['placeholder' => 'max@beispiel.de', 'class' => 'input', 'autocomplete' => 'email'],
                 'constraints' => [
                     new NotBlank(message: 'Bitte eine E-Mail-Adresse eingeben.'),
+                    new Email(message: 'Bitte eine gültige E-Mail-Adresse eingeben.'),
+                    // 180 entspricht der Spaltenlänge in der Datenbank (User::email)
+                    new Length(max: 180, maxMessage: 'Die E-Mail-Adresse darf maximal {{ limit }} Zeichen lang sein.'),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [

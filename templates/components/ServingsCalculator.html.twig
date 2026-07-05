@@ -1,0 +1,31 @@
+<section{{ attributes.defaults({class: 'ingredients-section'}) }}>
+    <h2>Zutaten</h2>
+    <div class="servings-control">
+        <button type="button" class="btn-servings" aria-label="Weniger Portionen"
+                data-action="live#action"
+                data-live-action-param="decrease">−</button>
+        <span class="servings-display">
+            <span class="servings-value">{{ currentServings }}</span> Portionen
+        </span>
+        <button type="button" class="btn-servings" aria-label="Mehr Portionen"
+                data-action="live#action"
+                data-live-action-param="increase">+</button>
+    </div>
+
+    {% set currentGroup = null %}
+    <ul class="ingredients-list">
+        {% for ingredient in recipe.ingredients %}
+            {% if ingredient.groupName != currentGroup %}
+                {% set currentGroup = ingredient.groupName %}
+                {% if currentGroup %}
+                    <li class="ingredient-group-header">{{ currentGroup }}</li>
+                {% endif %}
+            {% endif %}
+            <li class="ingredient-item">
+                <span class="ingredient-amount">{{ this.scaleAmount(ingredient.amount) }}</span>
+                <span class="ingredient-unit">{{ ingredient.unit }}</span>
+                <span class="ingredient-name">{{ ingredient.name }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</section>

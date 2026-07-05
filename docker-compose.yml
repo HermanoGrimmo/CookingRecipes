@@ -58,6 +58,20 @@ services:
     networks:
       - cooking
 
+  # Node.js Build-Service für Webpack Encore (Asset-Pipeline für Live Components)
+  node:
+    image: node:22-alpine
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: sh -c "tail -f /dev/null"
+    environment:
+      # Polling aktivieren – löst inotify-Probleme auf Windows/Docker-Desktop
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    networks:
+      - cooking
+
 volumes:
   postgres_data:
 

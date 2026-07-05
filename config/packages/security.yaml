@@ -28,6 +28,8 @@ security:
             logout:
                 path: security_logout
                 target: recipe_index
+                # enable_csrf ist erforderlich – csrf_token_id allein aktiviert die Prüfung nicht
+                enable_csrf: true
                 csrf_token_id: logout
 
     access_control:

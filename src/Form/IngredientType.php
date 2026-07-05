@@ -29,6 +29,9 @@ class IngredientType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Zutat', 'class' => 'input input-name'],
+                // empty_data verhindert einen TypeError beim Binden leerer Zeilen
+                // (Ingredient::setName() akzeptiert kein NULL).
+                'empty_data' => '',
             ])
             ->add('groupName', TextType::class, [
                 'label' => false,

@@ -14,14 +14,15 @@
             <p class="form-page-subtitle">Fülle das Formular aus, um ein neues Rezept anzulegen.</p>
         </div>
 
-        {% include 'recipe/_form.html.twig' with {
-            back_url: path('recipe_index'),
-            submit_label: 'Rezept speichern'
-        } %}
+        <twig:RecipeForm
+            :initialFormData="recipe"
+            backUrl="{{ path('recipe_index') }}"
+            submitLabel="Rezept speichern"
+        />
     </div>
 </div>
 {% endblock %}
 
 {% block body_js %}
-    {{ include('recipe/_form_js.html.twig') }}
+    {{ include('recipe/_image_preview_js.html.twig') }}
 {% endblock %}

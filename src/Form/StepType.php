@@ -25,6 +25,9 @@ class StepType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => false,
                 'attr' => ['placeholder' => 'Zubereitungsanleitung…', 'rows' => 4, 'class' => 'input'],
+                // empty_data verhindert einen TypeError beim Binden leerer Zeilen
+                // (Step::setDescription() akzeptiert kein NULL).
+                'empty_data' => '',
             ]);
     }
 
