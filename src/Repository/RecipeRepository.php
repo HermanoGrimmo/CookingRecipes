@@ -18,15 +18,6 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    /** @return Recipe[] */
-    public function findAllOrderedByNewest(): array
-    {
-        return $this->createQueryBuilder('r')
-            ->orderBy('r.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-    }
-
     /**
      * Filtert Rezepte nach Suchbegriff (Titel/Beschreibung), Schwierigkeitsgrad
      * und Sortierung. Wird vom RecipeList Live Component aufgerufen.
@@ -42,8 +33,10 @@ class RecipeRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('r');
 
         if (null !== $search && '' !== trim($search)) {
+            // LIKE-Wildcards (% und _) im Suchbegriff escapen, damit sie als Literale wirken.
+            $escaped = addcslashes(strtolower(trim($search)), '\\%_');
             $qb->andWhere('LOWER(r.title) LIKE :search OR LOWER(r.description) LIKE :search')
-                ->setParameter('search', '%' . strtolower(trim($search)) . '%');
+                ->setParameter('search', '%' . $escaped . '%');
         }
 
         if (null !== $difficulty && '' !== $difficulty) {
@@ -54,7 +47,8 @@ class RecipeRepository extends ServiceEntityRepository
         match ($sortBy) {
             'oldest' => $qb->orderBy('r.createdAt', 'ASC'),
             'title' => $qb->orderBy('r.title', 'ASC'),
-            'time' => $qb->orderBy('(r.prepTime + r.cookTime)', 'ASC'),
+            // DQL erlaubt keine Arithmetik direkt im ORDER BY – daher als HIDDEN-Select aliasieren.
+            'time' => $qb->addSelect('(r.prepTime + r.cookTime) AS HIDDEN totalTime')->orderBy('totalTime', 'ASC'),
             default => $qb->orderBy('r.createdAt', 'DESC'),
         };
 
