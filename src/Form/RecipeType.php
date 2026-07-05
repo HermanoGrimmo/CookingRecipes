@@ -25,6 +25,9 @@ class RecipeType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Titel',
                 'attr' => ['placeholder' => 'z. B. Cashew Hähnchen-Curry', 'class' => 'input'],
+                // empty_data verhindert, dass NULL auf den strikt typisierten Setter trifft;
+                // die NotBlank-Validierung greift dann regulär.
+                'empty_data' => '',
                 'constraints' => [new NotBlank(message: 'Bitte einen Titel eingeben.')],
             ])
             ->add('description', TextareaType::class, [

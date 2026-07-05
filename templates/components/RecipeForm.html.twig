@@ -76,7 +76,9 @@
         </div>
 
         <div class="collection-list">
-            {% for ingredientForm in form.ingredients %}
+            {# Wichtig: den Formular-Key übergeben, nicht loop.index0 – nach dem
+               Entfernen einer Zeile sind die Keys lückenhaft. #}
+            {% for key, ingredientForm in form.ingredients %}
                 <div class="collection-row">
                     {{ form_widget(ingredientForm.amount) }}
                     {{ form_widget(ingredientForm.unit) }}
@@ -85,7 +87,7 @@
                     <button type="button" class="btn-remove-row" title="Zutat entfernen"
                             data-action="live#action"
                             data-live-action-param="removeIngredient"
-                            data-live-index-param="{{ loop.index0 }}">✕</button>
+                            data-live-index-param="{{ key }}">✕</button>
                 </div>
             {% endfor %}
         </div>
@@ -105,7 +107,7 @@
         </h2>
 
         <div class="steps-collection">
-            {% for stepForm in form.steps %}
+            {% for key, stepForm in form.steps %}
                 <div class="step-collection-row">
                     <div class="step-col-number">{{ loop.index }}</div>
                     <div class="step-col-fields">
@@ -119,7 +121,7 @@
                     <button type="button" class="btn-remove-row" title="Schritt entfernen"
                             data-action="live#action"
                             data-live-action-param="removeStep"
-                            data-live-index-param="{{ loop.index0 }}">✕</button>
+                            data-live-index-param="{{ key }}">✕</button>
                 </div>
             {% endfor %}
         </div>

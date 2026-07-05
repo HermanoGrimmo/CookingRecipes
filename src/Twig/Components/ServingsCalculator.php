@@ -21,12 +21,30 @@ final class ServingsCalculator
 {
     use DefaultActionTrait;
 
+    /** Untergrenze für die Portionszahl */
+    public const int MIN_SERVINGS = 1;
+
+    /** Obergrenze für die Portionszahl (entspricht dem Maximum im Rezeptformular) */
+    public const int MAX_SERVINGS = 100;
+
     #[LiveProp]
     public ?Recipe $recipe = null;
 
-    /** Aktuell gewählte Portionszahl (vom Benutzer veränderbar). */
-    #[LiveProp(writable: true)]
+    /**
+     * Aktuell gewählte Portionszahl (vom Benutzer veränderbar).
+     * Da die Prop writable ist, wird sie nach jedem Client-Update geklemmt.
+     */
+    #[LiveProp(writable: true, onUpdated: 'clampCurrentServings')]
     public int $currentServings = 0;
+
+    /**
+     * Begrenzt die Portionszahl auf den gültigen Bereich – der Client könnte
+     * über das Live-Model beliebige Werte (0, negativ, riesig) setzen.
+     */
+    public function clampCurrentServings(): void
+    {
+        $this->currentServings = max(self::MIN_SERVINGS, min(self::MAX_SERVINGS, $this->currentServings));
+    }
 
     /**
      * Liefert den Skalierungsfaktor (currentServings / defaultServings).
@@ -34,7 +52,7 @@ final class ServingsCalculator
     public function getFactor(): float
     {
         $default = $this->recipe?->getServings() ?? 1;
-        if ($default <= 0) {
+        if ($default <= 0 || $this->currentServings <= 0) {
             return 1.0;
         }
 
@@ -69,14 +87,12 @@ final class ServingsCalculator
     #[LiveAction]
     public function increase(): void
     {
-        ++$this->currentServings;
+        $this->currentServings = min(self::MAX_SERVINGS, $this->currentServings + 1);
     }
 
     #[LiveAction]
     public function decrease(): void
     {
-        if ($this->currentServings > 1) {
-            --$this->currentServings;
-        }
+        $this->currentServings = max(self::MIN_SERVINGS, $this->currentServings - 1);
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
-use App\Entity\Ingredient;
 use App\Entity\Recipe;
-use App\Entity\Step;
 use App\Entity\User;
 use App\Form\RecipeType;
 use App\Security\RecipeVoter;
@@ -63,64 +61,47 @@ final class RecipeForm extends AbstractController
     }
 
     /**
-     * Fügt eine neue, leere Zutat ans Rezept an.
+     * Fügt eine neue, leere Zutaten-Zeile an.
+     *
+     * Die Zeilen werden direkt über die formValues verwaltet (Muster aus der
+     * Symfony-UX-Dokumentation): Die aktuellen Eingaben sind dort bereits
+     * synchronisiert, das Formular wird beim Re-Render daraus neu aufgebaut.
      */
     #[LiveAction]
     public function addIngredient(): void
     {
-        // Aktuelle Eingaben binden, ohne Validierung auszulösen.
-        $this->submitForm(false);
-
-        /** @var Recipe $recipe */
-        $recipe = $this->getForm()->getData();
-        $recipe->addIngredient(new Ingredient());
+        $this->formValues['ingredients'][] = [];
     }
 
     /**
-     * Entfernt die Zutat an gegebener Position.
+     * Entfernt die Zutaten-Zeile mit dem gegebenen Formular-Key.
+     *
+     * Wichtig: $index ist der Key des Formular-Kinds (im Template per
+     * `{% for key, ... %}` übergeben), NICHT die Position in der Liste –
+     * nach einem Entfernen sind die Keys lückenhaft.
      */
     #[LiveAction]
     public function removeIngredient(#[LiveArg] int $index): void
     {
-        $this->submitForm(false);
-
-        /** @var Recipe $recipe */
-        $recipe = $this->getForm()->getData();
-        $ingredients = $recipe->getIngredients()->toArray();
-
-        if (isset($ingredients[$index])) {
-            $recipe->removeIngredient($ingredients[$index]);
-        }
+        unset($this->formValues['ingredients'][$index]);
     }
 
     /**
-     * Fügt einen neuen, leeren Zubereitungsschritt an.
+     * Fügt eine neue, leere Schritt-Zeile an.
      */
     #[LiveAction]
     public function addStep(): void
     {
-        $this->submitForm(false);
-
-        /** @var Recipe $recipe */
-        $recipe = $this->getForm()->getData();
-        $recipe->addStep(new Step());
+        $this->formValues['steps'][] = [];
     }
 
     /**
-     * Entfernt den Schritt an gegebener Position.
+     * Entfernt die Schritt-Zeile mit dem gegebenen Formular-Key.
      */
     #[LiveAction]
     public function removeStep(#[LiveArg] int $index): void
     {
-        $this->submitForm(false);
-
-        /** @var Recipe $recipe */
-        $recipe = $this->getForm()->getData();
-        $steps = $recipe->getSteps()->toArray();
-
-        if (isset($steps[$index])) {
-            $recipe->removeStep($steps[$index]);
-        }
+        unset($this->formValues['steps'][$index]);
     }
 
     /**
@@ -129,30 +110,40 @@ final class RecipeForm extends AbstractController
     #[LiveAction]
     public function save(): Response
     {
+        // Autorisierung VOR der Formularverarbeitung prüfen. initialFormData ist
+        // eine nicht-schreibbare LiveProp und damit Checksummen-geschützt.
+        $isNew = null === $this->initialFormData?->getId();
+
+        if ($isNew) {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+        } else {
+            $this->denyAccessUnlessGranted(RecipeVoter::EDIT, $this->initialFormData);
+        }
+
         $this->submitForm();
 
         /** @var Recipe $recipe */
         $recipe = $this->getForm()->getData();
-        $isNew = null === $recipe->getId();
 
         if ($isNew) {
-            $this->denyAccessUnlessGranted('ROLE_USER');
             $user = $this->getUser();
             if (!$user instanceof User) {
                 throw new \LogicException('Kein eingeloggter Benutzer vorhanden.');
             }
             $recipe->setOwner($user);
             $recipe->setAuthor($user->getFullName());
-        } else {
-            $this->denyAccessUnlessGranted(RecipeVoter::EDIT, $recipe);
         }
 
         // Sortierung von Zutaten und Schritten anhand der Formular-Reihenfolge fixieren.
-        foreach ($recipe->getIngredients() as $i => $ingredient) {
-            $ingredient->setPosition($i);
+        // Zähler statt Collection-Keys verwenden – die Keys können nach dem
+        // Entfernen von Zeilen Lücken haben.
+        $position = 0;
+        foreach ($recipe->getIngredients() as $ingredient) {
+            $ingredient->setPosition($position++);
         }
-        foreach ($recipe->getSteps() as $i => $step) {
-            $step->setNumber($i + 1);
+        $number = 1;
+        foreach ($recipe->getSteps() as $step) {
+            $step->setNumber($number++);
         }
 
         if ($isNew) {
