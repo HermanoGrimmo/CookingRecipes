@@ -31,7 +31,7 @@
                     </a>
                     <span class="nav-user">{{ app.user.fullName }}</span>
                     <form method="post" action="{{ path('security_logout') }}" class="nav-logout-form">
-                        <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
                         <button type="submit" class="btn btn-ghost btn-sm">Abmelden</button>
                     </form>
                 {% else %}
