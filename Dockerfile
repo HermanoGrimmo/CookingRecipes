@@ -49,6 +49,8 @@ RUN mkdir -p var/cache var/log \
 # Entwicklungs-Target: Dev-Dependencies nachinstallieren
 FROM base AS development
 
+COPY docker/php/opcache-dev.ini /usr/local/etc/php/conf.d/zzz-opcache-dev.ini
+
 RUN composer install \
     --no-interaction \
     --no-progress
