@@ -1,0 +1,27 @@
+# HTTP-Clients für den Rezept-Import.
+#
+# Bewusst als scoped_clients definiert: Ein Scope-Client lehnt Requests an
+# fremde Hosts ab. Damit kann der Import-Layer konstruktionsbedingt nur die
+# beiden unterstützten Quellen ansprechen (Schutz vor SSRF über manipulierte
+# Rezept-URLs), und Tests können die Clients gezielt durch einen
+# MockHttpClient ersetzen.
+framework:
+    http_client:
+        scoped_clients:
+            chefkoch.client:
+                scope: '^https://(www|api|img)\.chefkoch(-cdn)?\.de/'
+                timeout: 10
+                max_duration: 15
+                max_redirects: 3
+                headers:
+                    User-Agent: '%env(HTTP_CLIENT_USER_AGENT)%'
+                    Accept-Language: 'de-DE,de;q=0.9'
+
+            foodboom.client:
+                scope: '^https://(www|api|images)\.foodboom\.de/'
+                timeout: 10
+                max_duration: 15
+                max_redirects: 3
+                headers:
+                    User-Agent: '%env(HTTP_CLIENT_USER_AGENT)%'
+                    Accept-Language: 'de-DE,de;q=0.9'

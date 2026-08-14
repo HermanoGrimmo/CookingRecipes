@@ -27,7 +27,22 @@
                 {{ form_widget(form.imagePath) }}
                 {{ form_errors(form.imagePath) }}
             </div>
+            <div class="form-group form-col-full">
+                {{ form_label(form.tags) }}
+                {{ form_widget(form.tags) }}
+                {{ form_help(form.tags) }}
+                {{ form_errors(form.tags) }}
+            </div>
         </div>
+
+        {# Herkunft eines importierten Rezepts – nicht bearbeitbar, nur Anzeige. #}
+        {% if sourceUrl %}
+            <p class="form-source-note">
+                Importiert von <strong>{{ sourceName }}</strong>
+                (<a href="{{ sourceUrl }}" target="_blank" rel="noopener noreferrer">Originalrezept</a>),
+                Autor: <strong>{{ importedAuthor }}</strong>
+            </p>
+        {% endif %}
     </section>
 
     {# ── Eckdaten ─────────────────────────────────────────────────── #}
@@ -35,7 +50,7 @@
         <h2 class="form-section-title">
             <span class="section-icon">⏱️</span> Eckdaten
         </h2>
-        <div class="form-grid form-grid-4">
+        <div class="form-grid form-grid-5">
             <div class="form-group">
                 {{ form_label(form.servings) }}
                 {{ form_widget(form.servings) }}
@@ -50,6 +65,12 @@
                 {{ form_label(form.cookTime) }}
                 {{ form_widget(form.cookTime) }}
                 {{ form_errors(form.cookTime) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.restTime) }}
+                {{ form_widget(form.restTime) }}
+                {{ form_help(form.restTime) }}
+                {{ form_errors(form.restTime) }}
             </div>
             <div class="form-group">
                 {{ form_label(form.difficulty) }}

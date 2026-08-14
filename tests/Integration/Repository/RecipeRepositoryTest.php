@@ -35,11 +35,38 @@ class RecipeRepositoryTest extends KernelTestCase
         $connection = $this->em->getConnection();
 
         // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
         $connection->executeStatement('DELETE FROM recipe');
+        $connection->executeStatement('DELETE FROM tag');
 
         parent::tearDown();
+    }
+
+    /** Ein importiertes Rezept wird über seine Quell-URL gefunden. */
+    public function testFindOneBySourceUrlFindetImportiertesRezept(): void
+    {
+        $this->createRecipe('Importiert', sourceUrl: 'https://www.chefkoch.de/rezepte/123/Test.html');
+        $this->createRecipe('Selbst angelegt');
+
+        $gefunden = $this->repository->findOneBySourceUrl('https://www.chefkoch.de/rezepte/123/Test.html');
+
+        self::assertNotNull($gefunden);
+        self::assertSame('Importiert', $gefunden->getTitle());
+        self::assertNull($this->repository->findOneBySourceUrl('https://www.chefkoch.de/rezepte/999/Andere.html'));
+    }
+
+    /**
+     * Mehrere manuell angelegte Rezepte haben alle source_url = NULL – der
+     * Unique-Index darf das nicht verhindern (PostgreSQL-Verhalten).
+     */
+    public function testMehrereRezepteOhneQuelleSindErlaubt(): void
+    {
+        $this->createRecipe('Ohne Quelle 1');
+        $this->createRecipe('Ohne Quelle 2');
+
+        self::assertCount(2, $this->repository->findFiltered(null, null, 'newest'));
     }
 
     /** Die Suche findet Rezepte unabhängig von Groß-/Kleinschreibung im Titel. */
@@ -130,10 +157,12 @@ class RecipeRepositoryTest extends KernelTestCase
         int $prepTime = 10,
         int $cookTime = 10,
         ?string $description = null,
+        ?string $sourceUrl = null,
     ): Recipe {
         $recipe = new Recipe();
         $recipe->setTitle($title);
         $recipe->setDescription($description);
+        $recipe->setSourceUrl($sourceUrl);
         $recipe->setAuthor('Test Autor');
         $recipe->setDifficulty($difficulty);
         $recipe->setPrepTime($prepTime);

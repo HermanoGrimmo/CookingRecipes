@@ -1,0 +1,1180 @@
+{
+    "data": {
+        "id": "1765edeb-53ab-4cd0-9a2a-7606a8046e33",
+        "title": "Indisches K\u00f6rnererbsen-Dal mit Naanbrot",
+        "slug": "indisches-koernererbsen-dal",
+        "favoritesCount": null,
+        "introText": "<p>Willkommen in der Welt der indischen Aromen! Kurkuma, Kreuzk\u00fcmmel und Garam Masala gepaart mit K\u00f6rnererbsen bringen die Gew\u00fcrzvielfalt Indiens direkt auf deinen Teller. Dazu gibt's fluffiges, selbstgebackenes Naanbrot \u2013 perfekt, um jede leckere Sauce aufzutunken!</p>",
+        "servings": {
+            "amount": 4,
+            "unit": {
+                "one": "Portion",
+                "many": "Portionen"
+            },
+            "suffix": null
+        },
+        "tip": "<p>F\u00fcr noch mehr Kick beim Naanbrot, die Butter mit gepresstem Knoblauch und gehacktem Koriander mischen, bevor du sie aufstreichst.</p><p>Alles Wissenswerte \u00fcber K\u00f6rnerleguminosen aus Europa findest du bei \"<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"follow\" href=\"https://www.dieviervonhier.eu/\">Die Vier von Hier</a>\".</p>",
+        "tags": [
+            "Alltag",
+            "Daily Boom",
+            "Alkoholfrei",
+            "Eiwei\u00dfreich",
+            "Vegetarisch",
+            "Suppen & Eint\u00f6pfe",
+            "Hauptgang"
+        ],
+        "verticals": [],
+        "kicker": "Herzhaft",
+        "waitTime": 720,
+        "cookTime": 90,
+        "nutritions": {
+            "protein": 31,
+            "fat": 19,
+            "carbs": 152,
+            "calories": 909
+        },
+        "isAd": true,
+        "publishedAt": "2026-07-01T12:58:17.370Z",
+        "pinterestImageUrl": null,
+        "tableOfContent": [],
+        "updatedAt": "2026-07-03T10:18:19.762Z",
+        "cNumber": "C26-1643",
+        "pNumber": "P26-1086",
+        "aggregatedRating": 5.0,
+        "ratingCount": 1,
+        "partner": {
+            "title": "UFOP",
+            "slug": null,
+            "image": {
+                "title": "UFOP Logo",
+                "slug": "ufop-logo",
+                "altText": "Kampagnenlogo \u201eDIE VIER VON HIER!\u201d",
+                "url": "0cq0yieth4nyyonj907d8jylsjih",
+                "focalPointX": 47,
+                "focalPointY": 52,
+                "ratio": "landscape",
+                "contentType": "image/png"
+            }
+        },
+        "headerImage": {
+            "title": "Indisches K\u00f6rnererbsen-Dal QUER",
+            "slug": "indisches-kornererbsen-dal-quer",
+            "altText": "K\u00f6rnererbsen-Dal in einem Teller angerichtet mit Naanbrot an der Seite des Tellers.",
+            "url": "mp3r5o1a9siicwffikbywq61ha4f",
+            "focalPointX": 46,
+            "focalPointY": 61,
+            "ratio": "landscape",
+            "contentType": "image/jpeg"
+        },
+        "headerImageMobile": {
+            "id": "7d7dcee8-150a-41bc-a2da-95701cecbd9b",
+            "title": "Indisches K\u00f6rnererbsen-Dal HOCH",
+            "slug": "indisches-kornererbsen-dal-hoch",
+            "altText": "K\u00f6rnererbsen-Dal in einem Teller angerichtet mit Naanbrot an der Seite des Tellers.",
+            "url": "7sovp38ac1yem7vesk1d1p0lqmif",
+            "thumbnailUrl": "7sovp38ac1yem7vesk1d1p0lqmif",
+            "lockVersion": 2,
+            "focalPointX": null,
+            "focalPointY": null,
+            "ratio": "portrait",
+            "creator": "FOODBOOM",
+            "contentType": "image/jpeg",
+            "projectContent": {
+                "id": "0dfb7f7e-0995-4313-bcbe-ec6ebcd001ab",
+                "cNumber": "C26-1643",
+                "name": "Indisches K\u00f6rnererbsen-Dal mit Naanbrot",
+                "startDate": null,
+                "endDate": null
+            }
+        },
+        "metaData": {
+            "title": "Indisches K\u00f6rnererbsen-Dal mit Naanbrot",
+            "description": "K\u00f6rnererbsen-Dal mit Kurkuma, Garam Masala und selbstgemachtem Naanbrot \u2013 ein indisches Gericht voller W\u00fcrze und Pflanzenkraft. Jetzt Rezept ausprobieren!",
+            "noIndex": false,
+            "noFollow": false
+        },
+        "video": null,
+        "foodstylist": {
+            "avatarUrl": "mz42crd6tk1gx6boep5xn3saldxz",
+            "name": "Hannes"
+        },
+        "utensils": [
+            {
+                "title": {
+                    "one": "Schneidebrett",
+                    "many": "Schneidebretter"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Schneidebrett",
+                    "titlePlural": "Schneidebretter",
+                    "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNCSGVwdEIifQ.3a16laUtT_zUcccBpu1YG2mOcJ7RkZMhulHk4efhfvw",
+                    "flyout": {
+                        "enabled": false,
+                        "title": "",
+                        "body": "",
+                        "ctaText": "",
+                        "ctaLink": "",
+                        "image": null
+                    },
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Sch\u00fcssel",
+                    "many": "Sch\u00fcsseln"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Sch\u00fcssel",
+                    "titlePlural": "Sch\u00fcsseln",
+                    "affiliateLink": null,
+                    "flyout": null,
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Pfanne",
+                    "many": "Pfannen"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Pfanne",
+                    "titlePlural": "Pfannen",
+                    "affiliateLink": null,
+                    "flyout": null,
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Messbecher",
+                    "many": "Messbecher"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Messbecher",
+                    "titlePlural": "Messbecher",
+                    "affiliateLink": null,
+                    "flyout": null,
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "K\u00fcchenmaschine",
+                    "many": "K\u00fcchenmaschine"
+                },
+                "amount": null,
+                "attributes": [
+                    "Knethaken"
+                ],
+                "product": null,
+                "equipment": {
+                    "title": "K\u00fcchenmaschine",
+                    "titlePlural": "K\u00fcchenmaschine",
+                    "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNITmRxTWEifQ.T740HZPkq2RHpvxXLtU-UDO1ekuxsMTrgVVThL6oAcw",
+                    "flyout": {
+                        "enabled": false,
+                        "title": "",
+                        "body": "",
+                        "ctaText": "",
+                        "ctaLink": "",
+                        "image": null
+                    },
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Pinsel",
+                    "many": "Pinsel"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Pinsel",
+                    "titlePlural": "Pinsel",
+                    "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNZZnlmRlkifQ.QaanqbdzhMTMrkVHOfgXhpoPapnuASql1DEvRLxTLNY",
+                    "flyout": {
+                        "enabled": false,
+                        "title": "",
+                        "body": "",
+                        "ctaText": "",
+                        "ctaLink": "",
+                        "image": null
+                    },
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Topf",
+                    "many": "T\u00f6pfe"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Topf",
+                    "titlePlural": "T\u00f6pfe",
+                    "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNVWXZWQXUifQ.SBzimg_W5l9RAmzS5EGygmWXHyIqgHJd_32DHHVUUFo",
+                    "flyout": {
+                        "enabled": false,
+                        "title": "",
+                        "body": "",
+                        "ctaText": "",
+                        "ctaLink": "",
+                        "image": null
+                    },
+                    "image": null
+                }
+            },
+            {
+                "title": {
+                    "one": "Nudelholz",
+                    "many": "Nudelholz"
+                },
+                "amount": null,
+                "attributes": [],
+                "product": null,
+                "equipment": {
+                    "title": "Nudelholz",
+                    "titlePlural": "Nudelholz",
+                    "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNCRGxXY0sifQ.RUYhCaz8AXSfZQ6v16l5RD3PEPOWSbGeeSwPkTSDdvY",
+                    "flyout": {
+                        "enabled": false,
+                        "title": "",
+                        "body": "",
+                        "ctaText": "",
+                        "ctaLink": "",
+                        "image": null
+                    },
+                    "image": null
+                }
+            }
+        ],
+        "preparationSteps": [
+            {
+                "body": "<p>F\u00fcr das Dal K\u00f6rnerberbsen ca. 12 Stunden (oder \u00fcber Nacht) in Wasser einweichen.</p>",
+                "order": 0,
+                "tipTitle": "",
+                "tipBody": "",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "K\u00f6rnererbse",
+                            "many": "K\u00f6rnererbsen"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 250.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [
+                            "getrocknet"
+                        ],
+                        "product": null
+                    }
+                ],
+                "utensils": [],
+                "video": null,
+                "image": null
+            },
+            {
+                "body": "<p>Zwiebel, Knoblauch und Ingwer sch\u00e4len und fein w\u00fcrfeln. Zwiebeln und Knoblauch in Raps\u00f6l farblos anschwitzen, anschlie\u00dfend Ingwer zugeben. Tomate waschen, w\u00fcrfeln und ebenfalls mit in den Topf geben. Gew\u00fcrze und K\u00f6rnererbsen dazugeben, kurz anschwitzen lassen und alles mit Gem\u00fcsebr\u00fche aufgie\u00dfen. Abgedeckt ca. 90 Minuten leicht k\u00f6cheln lassen.</p>",
+                "order": 1,
+                "tipTitle": "",
+                "tipBody": "",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "Zwiebel",
+                            "many": "Zwiebeln"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {},
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [
+                            "rot"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Knoblauchzehe",
+                            "many": "Knoblauchzehen"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 3.0,
+                        "unit": {},
+                        "order": 1,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Ingwer",
+                            "many": "Ingwer"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 20.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 2,
+                        "additionalData": null,
+                        "attributes": [
+                            "frisch"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Raps\u00f6l",
+                            "many": "Raps\u00f6l"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 3,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Tomate",
+                            "many": "Tomaten"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 3.0,
+                        "unit": {},
+                        "order": 4,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Kurkuma",
+                            "many": "Kurkuma"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Teel\u00f6ffel",
+                            "many": "Teel\u00f6ffel",
+                            "abbr": "TL"
+                        },
+                        "order": 5,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Kreuzk\u00fcmmel",
+                            "many": "Kreuzk\u00fcmmel"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Teel\u00f6ffel",
+                            "many": "Teel\u00f6ffel",
+                            "abbr": "TL"
+                        },
+                        "order": 6,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Garam Masala",
+                            "many": "Garam Masala"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Teel\u00f6ffel",
+                            "many": "Teel\u00f6ffel",
+                            "abbr": "TL"
+                        },
+                        "order": 7,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Salz",
+                            "many": "Salz"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": null,
+                        "unit": {},
+                        "order": 8,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Gem\u00fcsebr\u00fche",
+                            "many": "Gem\u00fcsebr\u00fche"
+                        },
+                        "affiliateLink": null,
+                        "flyout": {
+                            "enabled": true,
+                            "title": "Gem\u00fcsebr\u00fche lieber selber machen?",
+                            "body": "<p>Nichts leichter als das \u2013 hier findet ihr ein simples, aber extrem leckeres Rezept zum Nachkochen.</p>",
+                            "ctaText": "Zum Rezept",
+                            "ctaLink": "https://www.foodboom.de/rezept/gemuesebruehe-kochen",
+                            "image": {
+                                "title": "Gem\u00fcsebr\u00fche kochen",
+                                "slug": "gemusebruhe-kochen",
+                                "altText": "2 Glasflaschen Gem\u00fcsebr\u00fche stehen im Vordergrund",
+                                "url": "7nuj4z9cf5q0q3fd4psnxklb7i6b",
+                                "focalPointX": 54,
+                                "focalPointY": 53,
+                                "ratio": "landscape",
+                                "contentType": "image/jpeg"
+                            }
+                        },
+                        "quantity": 1200.0,
+                        "unit": {
+                            "one": "Milliliter",
+                            "many": "Milliliter",
+                            "abbr": "ml"
+                        },
+                        "order": 9,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ],
+                "utensils": [
+                    {
+                        "title": {
+                            "one": "Schneidebrett",
+                            "many": "Schneidebretter"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Schneidebrett",
+                            "titlePlural": "Schneidebretter",
+                            "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNCSGVwdEIifQ.3a16laUtT_zUcccBpu1YG2mOcJ7RkZMhulHk4efhfvw",
+                            "flyout": {
+                                "enabled": false,
+                                "title": "",
+                                "body": "",
+                                "ctaText": "",
+                                "ctaLink": "",
+                                "image": null
+                            },
+                            "image": null
+                        }
+                    },
+                    {
+                        "title": {
+                            "one": "Messbecher",
+                            "many": "Messbecher"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Messbecher",
+                            "titlePlural": "Messbecher",
+                            "affiliateLink": null,
+                            "flyout": null,
+                            "image": null
+                        }
+                    },
+                    {
+                        "title": {
+                            "one": "Topf",
+                            "many": "T\u00f6pfe"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Topf",
+                            "titlePlural": "T\u00f6pfe",
+                            "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNVWXZWQXUifQ.SBzimg_W5l9RAmzS5EGygmWXHyIqgHJd_32DHHVUUFo",
+                            "flyout": {
+                                "enabled": false,
+                                "title": "",
+                                "body": "",
+                                "ctaText": "",
+                                "ctaLink": "",
+                                "image": null
+                            },
+                            "image": null
+                        }
+                    }
+                ],
+                "video": null,
+                "image": null
+            },
+            {
+                "body": "<p>F\u00fcr das Naanbrot alle Zutaten au\u00dfer Butter mit der K\u00fcchenmaschine ca. 10 Minuten kneten. Anschlie\u00dfend portionsweise zu Kugeln formen, mit einem K\u00fcchentuch abdecken und 1 Stunde ruhen lassen.</p>",
+                "order": 2,
+                "tipTitle": "",
+                "tipBody": "",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "Weizenmehl (Type 550)",
+                            "many": "Weizenmehl (Type 550)"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 550.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Trockenhefe",
+                            "many": "Trockenhefe"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 7.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 1,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Zucker",
+                            "many": "Zucker"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Teel\u00f6ffel",
+                            "many": "Teel\u00f6ffel",
+                            "abbr": "TL"
+                        },
+                        "order": 2,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Naturjoghurt",
+                            "many": "Naturjoghurt"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 150.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 3,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Wasser",
+                            "many": "Wasser"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 200.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 4,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ],
+                "utensils": [
+                    {
+                        "title": {
+                            "one": "Sch\u00fcssel",
+                            "many": "Sch\u00fcsseln"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Sch\u00fcssel",
+                            "titlePlural": "Sch\u00fcsseln",
+                            "affiliateLink": null,
+                            "flyout": null,
+                            "image": null
+                        }
+                    },
+                    {
+                        "title": {
+                            "one": "K\u00fcchenmaschine",
+                            "many": "K\u00fcchenmaschine"
+                        },
+                        "amount": null,
+                        "attributes": [
+                            "Knethaken"
+                        ],
+                        "product": null,
+                        "equipment": {
+                            "title": "K\u00fcchenmaschine",
+                            "titlePlural": "K\u00fcchenmaschine",
+                            "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNITmRxTWEifQ.T740HZPkq2RHpvxXLtU-UDO1ekuxsMTrgVVThL6oAcw",
+                            "flyout": {
+                                "enabled": false,
+                                "title": "",
+                                "body": "",
+                                "ctaText": "",
+                                "ctaLink": "",
+                                "image": null
+                            },
+                            "image": null
+                        }
+                    }
+                ],
+                "video": null,
+                "image": null
+            },
+            {
+                "body": "<p>Die Teigkugeln mit den H\u00e4nden oder einem Nudelholz flach dr\u00fccken und ohne Fett in der hei\u00dfen Pfanne von beiden Seiten anbraten. Nach dem Anbraten aus der Pfanne nehmen, mit etwas Butter bestreichen und warm halten.</p>",
+                "order": 3,
+                "tipTitle": "",
+                "tipBody": "",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "Butter",
+                            "many": "Butter"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ],
+                "utensils": [
+                    {
+                        "title": {
+                            "one": "Pfanne",
+                            "many": "Pfannen"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Pfanne",
+                            "titlePlural": "Pfannen",
+                            "affiliateLink": null,
+                            "flyout": null,
+                            "image": null
+                        }
+                    },
+                    {
+                        "title": {
+                            "one": "Pinsel",
+                            "many": "Pinsel"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Pinsel",
+                            "titlePlural": "Pinsel",
+                            "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNZZnlmRlkifQ.QaanqbdzhMTMrkVHOfgXhpoPapnuASql1DEvRLxTLNY",
+                            "flyout": {
+                                "enabled": false,
+                                "title": "",
+                                "body": "",
+                                "ctaText": "",
+                                "ctaLink": "",
+                                "image": null
+                            },
+                            "image": null
+                        }
+                    },
+                    {
+                        "title": {
+                            "one": "Nudelholz",
+                            "many": "Nudelholz"
+                        },
+                        "amount": null,
+                        "attributes": [],
+                        "product": null,
+                        "equipment": {
+                            "title": "Nudelholz",
+                            "titlePlural": "Nudelholz",
+                            "affiliateLink": "https://api.foodboom.de/v3/link/eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoiaHR0cHM6Ly9hbXpuLnRvLzNCRGxXY0sifQ.RUYhCaz8AXSfZQ6v16l5RD3PEPOWSbGeeSwPkTSDdvY",
+                            "flyout": {
+                                "enabled": false,
+                                "title": "",
+                                "body": "",
+                                "ctaText": "",
+                                "ctaLink": "",
+                                "image": null
+                            },
+                            "image": null
+                        }
+                    }
+                ],
+                "video": null,
+                "image": null
+            },
+            {
+                "body": "<p>Koriander waschen, Bl\u00e4tter abzupfen und grob hacken. K\u00f6rnererbsen-Dal mit Koriander bestreuen und mit Naanbrot servieren.</p>",
+                "order": 4,
+                "tipTitle": "",
+                "tipBody": "",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "Koriander",
+                            "many": "Koriander"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 4.0,
+                        "unit": {
+                            "one": "Stiel",
+                            "many": "Stiele"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ],
+                "utensils": [],
+                "video": null,
+                "image": null
+            }
+        ],
+        "ingredientGroups": [
+            {
+                "title": "F\u00fcr das Dal:",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "K\u00f6rnererbse",
+                            "many": "K\u00f6rnererbsen"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 250.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [
+                            "getrocknet"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Zwiebel",
+                            "many": "Zwiebeln"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {},
+                        "order": 1,
+                        "additionalData": null,
+                        "attributes": [
+                            "rot"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Knoblauchzehe",
+                            "many": "Knoblauchzehen"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 3.0,
+                        "unit": {},
+                        "order": 2,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Ingwer",
+                            "many": "Ingwer"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 20.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 3,
+                        "additionalData": null,
+                        "attributes": [
+                            "frisch"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Raps\u00f6l",
+                            "many": "Raps\u00f6l"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 4,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Tomate",
+                            "many": "Tomaten"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 3.0,
+                        "unit": {},
+                        "order": 5,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Kurkuma",
+                            "many": "Kurkuma"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 6,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Kreuzk\u00fcmmel",
+                            "many": "Kreuzk\u00fcmmel"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 7,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Garam Masala",
+                            "many": "Garam Masala"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 8,
+                        "additionalData": null,
+                        "attributes": [
+                            "gemahlen"
+                        ],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Salz",
+                            "many": "Salz"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": null,
+                        "unit": {},
+                        "order": 9,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Gem\u00fcsebr\u00fche",
+                            "many": "Gem\u00fcsebr\u00fche"
+                        },
+                        "affiliateLink": null,
+                        "flyout": {
+                            "enabled": true,
+                            "title": "Gem\u00fcsebr\u00fche lieber selber machen?",
+                            "body": "<p>Nichts leichter als das \u2013 hier findet ihr ein simples, aber extrem leckeres Rezept zum Nachkochen.</p>",
+                            "ctaText": "Zum Rezept",
+                            "ctaLink": "https://www.foodboom.de/rezept/gemuesebruehe-kochen",
+                            "image": {
+                                "title": "Gem\u00fcsebr\u00fche kochen",
+                                "slug": "gemusebruhe-kochen",
+                                "altText": "2 Glasflaschen Gem\u00fcsebr\u00fche stehen im Vordergrund",
+                                "url": "7nuj4z9cf5q0q3fd4psnxklb7i6b",
+                                "focalPointX": 54,
+                                "focalPointY": 53,
+                                "ratio": "landscape",
+                                "contentType": "image/jpeg"
+                            }
+                        },
+                        "quantity": 1200.0,
+                        "unit": {
+                            "one": "Milliliter",
+                            "many": "Milliliter",
+                            "abbr": "ml"
+                        },
+                        "order": 10,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Koriander",
+                            "many": "Koriander"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 4.0,
+                        "unit": {
+                            "one": "Stiel",
+                            "many": "Stiele"
+                        },
+                        "order": 11,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ]
+            },
+            {
+                "title": "F\u00fcr das Naanbrot:",
+                "ingredients": [
+                    {
+                        "title": {
+                            "one": "Weizenmehl (Type 550)",
+                            "many": "Weizenmehl (Type 550)"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 550.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 0,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Trockenhefe",
+                            "many": "Trockenhefe"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 7.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 1,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Zucker",
+                            "many": "Zucker"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 1.0,
+                        "unit": {
+                            "one": "Teel\u00f6ffel",
+                            "many": "Teel\u00f6ffel",
+                            "abbr": "TL"
+                        },
+                        "order": 2,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Naturjoghurt",
+                            "many": "Naturjoghurt"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 150.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 3,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Wasser",
+                            "many": "Wasser"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 200.0,
+                        "unit": {
+                            "one": "Gramm",
+                            "many": "Gramm",
+                            "abbr": "g"
+                        },
+                        "order": 4,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    },
+                    {
+                        "title": {
+                            "one": "Butter",
+                            "many": "Butter"
+                        },
+                        "affiliateLink": null,
+                        "flyout": null,
+                        "quantity": 2.0,
+                        "unit": {
+                            "one": "Essl\u00f6ffel",
+                            "many": "Essl\u00f6ffel",
+                            "abbr": "EL"
+                        },
+                        "order": 5,
+                        "additionalData": null,
+                        "attributes": [],
+                        "product": null
+                    }
+                ]
+            }
+        ],
+        "contents": []
+    },
+    "errors": null,
+    "warnings": {},
+    "permissions": null
+}
