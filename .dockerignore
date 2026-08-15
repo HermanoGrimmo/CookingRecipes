@@ -4,8 +4,11 @@
 
 # Docker-Konfiguration selbst nicht ins Image kopieren
 docker-compose*.yml
+compose*.yaml
 Dockerfile
 .dockerignore
+.env.deploy
+.env.deploy.example
 
 # Symfony Laufzeit-Daten
 var/cache
@@ -14,6 +17,9 @@ var/log
 # Entwicklungs-Abhängigkeiten und Tools
 vendor
 node_modules
+
+# Lokal gebaute Assets: das Image baut sie reproduzierbar in der assets-Stufe
+public/build
 .env.local
 .env.*.local
 
