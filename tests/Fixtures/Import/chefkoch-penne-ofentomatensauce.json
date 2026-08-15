@@ -1,0 +1,324 @@
+{
+    "id": "1563431263845794",
+    "type": 0,
+    "title": "Penne mit Ofentomatensauce",
+    "subtitle": "mit frischen Tomaten, schnell und einfach",
+    "owner": {
+        "id": "8583773ea740a4f026bd1ea48c64ca00",
+        "username": "anfieta",
+        "rank": 6,
+        "role": "user",
+        "hasAvatar": true,
+        "hasPaid": false,
+        "deleted": false,
+        "avatarImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/ck.de/user/8583773ea740a4f026bd1ea48c64ca00.jpg",
+        "isVerified": false,
+        "displayName": "anfieta"
+    },
+    "rating": {
+        "rating": 5.0,
+        "numVotes": 6
+    },
+    "difficulty": 1,
+    "hasImage": true,
+    "hasVideo": false,
+    "previewImageId": "1131184",
+    "previewImageOwner": {
+        "id": "c9dba2fda956cb06d2f20864ac2cb35f",
+        "username": "CK_Print-Magazin",
+        "rank": 9,
+        "role": "admin",
+        "hasAvatar": true,
+        "hasPaid": true,
+        "deleted": false,
+        "avatarImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/ck.de/user/c9dba2fda956cb06d2f20864ac2cb35f.jpg",
+        "isVerified": false,
+        "displayName": "CK_Print-Magazin"
+    },
+    "preparationTime": 15,
+    "isSubmitted": true,
+    "isRejected": false,
+    "createdAt": "2010-01-19T16:41:10+01:00",
+    "dateModified": "2026-08-14T09:48:53+02:00",
+    "imageCount": 6,
+    "editor": {
+        "id": "651ed30d358ecb8b4ffdba20e5cb12e7",
+        "username": "elschen",
+        "rank": 9,
+        "role": "moderator",
+        "hasAvatar": true,
+        "hasPaid": true,
+        "deleted": false,
+        "avatarImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/ck.de/user/651ed30d358ecb8b4ffdba20e5cb12e7.jpg",
+        "isVerified": false,
+        "displayName": "elschen"
+    },
+    "submissionDate": "2009-10-20T19:14:45+02:00",
+    "isPremium": false,
+    "status": 99,
+    "slug": "Penne-mit-Ofentomatensauce",
+    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/rezepte/1563431263845794/bilder/1131184/<format>/penne-mit-ofentomatensauce.jpg",
+    "previewImageCredits": "CK_Print-Magazin/Marie Therese Cramer",
+    "isPlus": false,
+    "additionalDescription": "",
+    "source": null,
+    "servings": 4,
+    "kCalories": 659,
+    "nutrition": null,
+    "instructions": "Die Tomaten mit einem scharfen Messer kreuzweise einschneiden und mit hei\u00dfem Wasser \u00fcbergie\u00dfen. Danach enth\u00e4uten (wer einen guten Sparsch\u00e4ler besitzt und feste Tomaten verwendet, kann diese auch sch\u00e4len), Stielansatz herausschneiden und halbieren. \n\nEin Backblech mit Zucker bestreuen. Die Tomaten mit den Schnittfl\u00e4chen nach unten auf das Blech legen. Knoblauch in Scheiben schneiden und zusammen mit dem \u00d6l und Thymian zu den Tomaten geben. Salzen und pfeffern. Im Ofen bei 220 Grad ca. 20-25 Min. braten. Nach der H\u00e4lfte der Backzeit die Tomaten mit einer Gabel zerteilen. \n\nIn der Zwischenzeit die Nudeln al dente kochen und abgie\u00dfen. Die Sauce sofort \u00fcber die gegarten Nudeln geben, mischen und abschmecken. Mit frischem Basilikum und frisch geriebenem Parmesan servieren.\n \nSollten noch Nudeln \u00fcbrig bleiben, k\u00f6nnen diese auch gut kalt als Nudelsalat gegessen werden.",
+    "miscellaneousText": "",
+    "ingredientsText": "",
+    "tags": [
+        "Braten",
+        "Pasta",
+        "Nudeln",
+        "Hauptspeise",
+        "Gem\u00fcse",
+        "Schnell",
+        "einfach",
+        "Studentenk\u00fcche",
+        "vegetarisch"
+    ],
+    "fullTags": [
+        {
+            "id": 18,
+            "name": "Gem\u00fcse"
+        },
+        {
+            "id": 21,
+            "name": "Hauptspeise"
+        },
+        {
+            "id": 24,
+            "name": "Nudeln"
+        },
+        {
+            "id": 31,
+            "name": "Pasta"
+        },
+        {
+            "id": 32,
+            "name": "Vegetarisch"
+        },
+        {
+            "id": 49,
+            "name": "Schnell"
+        },
+        {
+            "id": 50,
+            "name": "einfach"
+        },
+        {
+            "id": 69,
+            "name": "Braten"
+        },
+        {
+            "id": 211,
+            "name": "Studentenk\u00fcche"
+        }
+    ],
+    "viewCount": 5767,
+    "cookingTime": 25,
+    "restingTime": 0,
+    "totalTime": 40,
+    "ingredientGroups": [
+        {
+            "header": " ",
+            "ingredients": [
+                {
+                    "id": "10100617",
+                    "name": "Penne",
+                    "unit": "g",
+                    "unitId": "3",
+                    "amount": 500.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": null,
+                    "foodId": "761",
+                    "productGroup": "Nudeln,  Reis & Co.",
+                    "blsKey": "E401000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_260957090.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100618",
+                    "name": "Tomate(n)",
+                    "unit": "",
+                    "unitId": "9",
+                    "amount": 10.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": "https://www.chefkoch.de/magazin/artikel/46,0/Chefkoch/Tomaten-Pflanzen-ernten-tolle-Gerichte-entdecken.html",
+                    "foodId": "25",
+                    "productGroup": "Obst,  Gem\u00fcse und Kr\u00e4uter",
+                    "blsKey": "G560000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_70775723.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100619",
+                    "name": "Knoblauchzehe(n)",
+                    "unit": "",
+                    "unitId": "9",
+                    "amount": 2.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": "https://www.chefkoch.de/magazin/artikel/29,0/Chefkoch/Knoblauch.html",
+                    "foodId": "5675",
+                    "productGroup": "Obst,  Gem\u00fcse und Kr\u00e4uter",
+                    "blsKey": "G490000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_42343143.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100620",
+                    "name": "Oliven\u00f6l",
+                    "unit": "EL",
+                    "unitId": "13",
+                    "amount": 3.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": "https://www.chefkoch.de/magazin/artikel/66,0/Chefkoch/Olivenoel-und-die-richtige-Verwendung-in-der-Kueche.html",
+                    "foodId": "3393",
+                    "productGroup": "Essig,  \u00d6l und So\u00dfen",
+                    "blsKey": "Q120000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_124729332.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100621",
+                    "name": "Thymian",
+                    "unit": "Zweig/e",
+                    "unitId": "150",
+                    "amount": 4.0,
+                    "isBasic": false,
+                    "usageInfo": "oder 1/2 TL getrockneter",
+                    "url": null,
+                    "foodId": "163",
+                    "productGroup": "Obst,  Gem\u00fcse und Kr\u00e4uter",
+                    "blsKey": "G082000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_361766999.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100622",
+                    "name": "Oliven\u00f6l",
+                    "unit": "EL",
+                    "unitId": "13",
+                    "amount": 3.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": "https://www.chefkoch.de/magazin/artikel/66,0/Chefkoch/Olivenoel-und-die-richtige-Verwendung-in-der-Kueche.html",
+                    "foodId": "3393",
+                    "productGroup": "Essig,  \u00d6l und So\u00dfen",
+                    "blsKey": "Q120000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_124729332.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100623",
+                    "name": "Salz und Pfeffer",
+                    "unit": "",
+                    "unitId": "9",
+                    "amount": 0.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": null,
+                    "foodId": "292",
+                    "productGroup": "Gew\u00fcrze",
+                    "blsKey": "R110000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_157213095.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100624",
+                    "name": "Zucker",
+                    "unit": "EL",
+                    "unitId": "13",
+                    "amount": 1.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": null,
+                    "foodId": "83",
+                    "productGroup": "Salz und Zucker",
+                    "blsKey": "S110000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_251777846.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100625",
+                    "name": "Basilikum",
+                    "unit": "",
+                    "unitId": "9",
+                    "amount": 0.0,
+                    "isBasic": false,
+                    "usageInfo": "",
+                    "url": null,
+                    "foodId": "66",
+                    "productGroup": "Obst,  Gem\u00fcse und Kr\u00e4uter",
+                    "blsKey": "G061000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/US_bLWVqWOUfI4.png",
+                    "sponsoring": null
+                },
+                {
+                    "id": "10100626",
+                    "name": "Parmesan",
+                    "unit": "",
+                    "unitId": "9",
+                    "amount": 0.0,
+                    "isBasic": false,
+                    "usageInfo": "zum Bestreuen",
+                    "url": null,
+                    "foodId": "318",
+                    "productGroup": "Milchprodukte,  K\u00e4se,  Eier & Co.",
+                    "blsKey": "M306000",
+                    "previewImageUrlTemplate": "https://img.chefkoch-cdn.de/images/<format>/assets/v2/img/food/AS_305824085.png",
+                    "sponsoring": null
+                }
+            ]
+        }
+    ],
+    "categoryIds": [
+        "69",
+        "81",
+        "39",
+        "13",
+        "114",
+        "33",
+        "192"
+    ],
+    "categoryBreadcrumb": [
+        {
+            "id": "61",
+            "title": "Zubereitungsarten",
+            "url": "https://www.chefkoch.de/rs/s0g61/Zubereitungsarten.html"
+        },
+        {
+            "id": "62",
+            "title": "Methoden",
+            "url": "https://www.chefkoch.de/rs/s0g62/Kochmethoden.html"
+        },
+        {
+            "id": "69",
+            "title": "Braten",
+            "url": "https://www.chefkoch.de/rs/s0t69/Braten-Rezepte.html"
+        }
+    ],
+    "recipeCuisine": "Deutsch",
+    "recipeVideoId": null,
+    "isIndexable": true,
+    "affiliateContent": "",
+    "isTopRecipe": false,
+    "editorialIntro": null,
+    "ckCheckDecisiveTip": null,
+    "ckCheckCommonErrors": null,
+    "ckCheckAppearance": null,
+    "editorialTips": null,
+    "editorialUserId": null,
+    "editorialUser": null,
+    "metaTitle": "",
+    "metaDescription": "",
+    "campaign": null,
+    "savedRecipesCount": 2246,
+    "siteUrl": "https://www.chefkoch.de/rezepte/1563431263845794/Penne-mit-Ofentomatensauce.html"
+}

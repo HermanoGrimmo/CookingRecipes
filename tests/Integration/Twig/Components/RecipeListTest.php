@@ -32,9 +32,11 @@ class RecipeListTest extends KernelTestCase
     {
         $connection = $this->em->getConnection();
 
+        $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
         $connection->executeStatement('DELETE FROM recipe');
+        $connection->executeStatement('DELETE FROM tag');
 
         parent::tearDown();
     }

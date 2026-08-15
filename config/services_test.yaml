@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+# Test-spezifische Service-Überschreibungen.
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Die Importer bekommen im Test-Environment einen MockHttpClient statt des
+    # echten Scoped Clients. Damit kann kein Test versehentlich chefkoch.de
+    # oder foodboom.de aufrufen – ein MockHttpClient ohne konfigurierte
+    # Antwort wirft. Die produktive Konfiguration (Timeouts, Scope,
+    # User-Agent) steht unverändert in config/packages/http_client.yaml.
+    #
+    # Die Mocks sind public, damit Integrationstests sie aus dem Container
+    # holen und per setResponseFactory() programmieren können.
+    app.test.chefkoch_http_client:
+        class: Symfony\Component\HttpClient\MockHttpClient
+        public: true
+
+    app.test.foodboom_http_client:
+        class: Symfony\Component\HttpClient\MockHttpClient
+        public: true
+
+    App\Import\Importer\ChefkochImporter:
+        arguments:
+            $client: '@app.test.chefkoch_http_client'
+
+    App\Import\Importer\FoodboomImporter:
+        arguments:
+            $client: '@app.test.foodboom_http_client'

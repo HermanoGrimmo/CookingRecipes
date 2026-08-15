@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ORM\Table(name: 'recipe')]
+#[ORM\UniqueConstraint(name: 'UNIQ_recipe_source_url', columns: ['source_url'])]
 class Recipe
 {
     #[ORM\Id]
@@ -50,6 +51,16 @@ class Recipe
     #[ORM\Column]
     private int $cookTime = 0;
 
+    /**
+     * Ruhezeit in Minuten (Teig gehen lassen, Einweichen, Marinieren …).
+     *
+     * Bewusst getrennt von prepTime/cookTime: Sie fließt nicht in
+     * getTotalTime() ein, weil sie keine aktive Arbeitszeit ist und die
+     * Sortierung nach Gesamtzeit sonst von Einweichzeiten dominiert würde.
+     */
+    #[ORM\Column]
+    private int $restTime = 0;
+
     /** Schwierigkeitsgrad: einfach, mittel, schwer */
     #[ORM\Column(length: 50)]
     private string $difficulty = 'einfach';
@@ -65,6 +76,24 @@ class Recipe
     /** Erstellungsdatum */
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
+
+    /**
+     * URL des Original-Rezepts, falls importiert (sonst NULL).
+     *
+     * Der Unique-Index verhindert, dass dieselbe Quelle zweimal importiert
+     * wird. PostgreSQL lässt mehrere NULL-Werte in einem Unique-Index zu –
+     * manuell angelegte Rezepte sind davon also nicht betroffen.
+     */
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $sourceUrl = null;
+
+    /** Anzeigename der Quelle, z. B. "Chefkoch" oder "FOODBOOM" */
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $sourceName = null;
+
+    /** Zeitpunkt des Imports (NULL bei manuell angelegten Rezepten) */
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $importedAt = null;
 
     /** @var Collection<int, Ingredient> */
     #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe', cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -84,10 +113,25 @@ class Recipe
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $owner = null;
 
+    /**
+     * Schlagwörter des Rezepts.
+     *
+     * cascade: ['persist'] erlaubt es, beim Import neue Tags einfach an das
+     * Rezept zu hängen – sie werden zusammen mit dem Rezept gespeichert.
+     * Kein orphanRemoval: Tags werden von mehreren Rezepten geteilt.
+     *
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'recipes', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'recipe_tag')]
+    #[ORM\OrderBy(['name' => 'ASC'])]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
         $this->steps = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -180,7 +224,24 @@ class Recipe
         return $this;
     }
 
-    /** Gesamtzeit in Minuten */
+    public function getRestTime(): int
+    {
+        return $this->restTime;
+    }
+
+    public function setRestTime(int $restTime): static
+    {
+        $this->restTime = $restTime;
+
+        return $this;
+    }
+
+    /**
+     * Aktive Gesamtzeit in Minuten.
+     *
+     * Ruhezeit ist bewusst NICHT enthalten – siehe Kommentar an $restTime.
+     * Die Sortierung in RecipeRepository::findFiltered() rechnet identisch.
+     */
     public function getTotalTime(): int
     {
         return $this->prepTime + $this->cookTime;
@@ -283,6 +344,70 @@ class Recipe
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getSourceUrl(): ?string
+    {
+        return $this->sourceUrl;
+    }
+
+    public function setSourceUrl(?string $sourceUrl): static
+    {
+        $this->sourceUrl = $sourceUrl;
+
+        return $this;
+    }
+
+    public function getSourceName(): ?string
+    {
+        return $this->sourceName;
+    }
+
+    public function setSourceName(?string $sourceName): static
+    {
+        $this->sourceName = $sourceName;
+
+        return $this;
+    }
+
+    public function getImportedAt(): ?\DateTimeImmutable
+    {
+        return $this->importedAt;
+    }
+
+    public function setImportedAt(?\DateTimeImmutable $importedAt): static
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
+    }
+
+    /** Ob das Rezept aus einer externen Quelle importiert wurde. */
+    public function isImported(): bool
+    {
+        return null !== $this->sourceUrl;
+    }
+
+    /** @return Collection<int, Tag> */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }
