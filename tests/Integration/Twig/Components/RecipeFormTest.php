@@ -6,6 +6,7 @@ namespace App\Tests\Integration\Twig\Components;
 
 use App\Entity\Ingredient;
 use App\Entity\Recipe;
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Twig\Components\RecipeForm;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,9 +38,11 @@ class RecipeFormTest extends KernelTestCase
         $connection = $this->em->getConnection();
 
         // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
         $connection->executeStatement('DELETE FROM recipe');
+        $connection->executeStatement('DELETE FROM tag');
         $connection->executeStatement('DELETE FROM reset_password_request');
         $connection->executeStatement('DELETE FROM app_user');
 
@@ -119,6 +122,131 @@ class RecipeFormTest extends KernelTestCase
 
         $crawler = $component->render()->crawler();
         self::assertCount(2, $crawler->filter('.collection-row'));
+    }
+
+    /**
+     * Ein manuell angelegtes Rezept bekommt weiterhin den Namen des
+     * eingeloggten Benutzers als Autor und keine Herkunftsdaten.
+     */
+    public function testManuellAngelegtesRezeptBehaeltDenBenutzerAlsAutor(): void
+    {
+        $user = $this->createUser('autor@example.com');
+
+        $component = $this->createLiveComponent(RecipeForm::class, [
+            'initialFormData' => $this->createUnsavedRecipe('Selbst erfunden'),
+        ])->actingAs($user);
+
+        $component->call('save');
+
+        $recipe = $this->findRecipeByTitle('Selbst erfunden');
+        self::assertSame('Test User', $recipe->getAuthor());
+        self::assertSame($user->getId(), $recipe->getOwner()?->getId());
+        self::assertNull($recipe->getSourceUrl());
+        self::assertNull($recipe->getSourceName());
+        self::assertNull($recipe->getImportedAt());
+        self::assertFalse($recipe->isImported());
+    }
+
+    /**
+     * Ein importiertes Rezept behält den Autor der Quelle und bekommt die
+     * Herkunftsdaten – der eingeloggte Benutzer wird trotzdem Eigentümer.
+     */
+    public function testImportiertesRezeptBehaeltAutorUndHerkunft(): void
+    {
+        $user = $this->createUser('importeur@example.com');
+
+        $component = $this->createLiveComponent(RecipeForm::class, [
+            'initialFormData' => $this->createUnsavedRecipe('Penne mit Ofentomatensauce'),
+            'sourceUrl' => 'https://www.chefkoch.de/rezepte/123/Test.html',
+            'sourceName' => 'Chefkoch',
+            'importedAuthor' => 'anfieta',
+        ])->actingAs($user);
+
+        $component->call('save');
+
+        $recipe = $this->findRecipeByTitle('Penne mit Ofentomatensauce');
+        self::assertSame('anfieta', $recipe->getAuthor());
+        self::assertSame($user->getId(), $recipe->getOwner()?->getId(), 'Der Importeur muss Eigentümer bleiben.');
+        self::assertSame('https://www.chefkoch.de/rezepte/123/Test.html', $recipe->getSourceUrl());
+        self::assertSame('Chefkoch', $recipe->getSourceName());
+        self::assertNotNull($recipe->getImportedAt());
+        self::assertTrue($recipe->isImported());
+    }
+
+    /**
+     * Twig übergibt nicht gesetzte Props als Leerstring – daraus darf kein
+     * leerer Autor und keine leere Quell-URL werden (der Unique-Index auf
+     * source_url würde beim zweiten Rezept zuschlagen).
+     */
+    public function testLeereHerkunftsPropsWerdenWieNichtGesetztBehandelt(): void
+    {
+        $user = $this->createUser('leer@example.com');
+
+        $component = $this->createLiveComponent(RecipeForm::class, [
+            'initialFormData' => $this->createUnsavedRecipe('Ohne Herkunft'),
+            'sourceUrl' => '',
+            'sourceName' => '',
+            'importedAuthor' => '',
+        ])->actingAs($user);
+
+        $component->call('save');
+
+        $recipe = $this->findRecipeByTitle('Ohne Herkunft');
+        self::assertSame('Test User', $recipe->getAuthor());
+        self::assertNull($recipe->getSourceUrl());
+    }
+
+    /** Tags werden als kommaseparierter Text übernommen. */
+    public function testTagsWerdenAusDemTextfeldUebernommen(): void
+    {
+        $user = $this->createUser('tagger@example.com');
+
+        $unsaved = $this->createUnsavedRecipe('Mit Tags');
+        $unsaved->addTag(new Tag('Pasta'));
+        $unsaved->addTag(new Tag('Vegetarisch'));
+
+        $component = $this->createLiveComponent(RecipeForm::class, ['initialFormData' => $unsaved])
+            ->actingAs($user);
+
+        $component->call('save');
+
+        $recipe = $this->findRecipeByTitle('Mit Tags');
+
+        $names = [];
+        foreach ($recipe->getTags() as $tag) {
+            $names[] = $tag->getName();
+        }
+        sort($names);
+
+        self::assertSame(['Pasta', 'Vegetarisch'], $names);
+    }
+
+    /**
+     * Ein noch nicht gespeichertes, gültig ausgefülltes Rezept – so, wie es
+     * der RecipeImportService an die Komponente übergibt.
+     */
+    private function createUnsavedRecipe(string $title): Recipe
+    {
+        $recipe = new Recipe();
+        $recipe->setTitle($title);
+        $recipe->setDifficulty('einfach');
+        $recipe->setServings(4);
+        $recipe->setPrepTime(15);
+        $recipe->setCookTime(25);
+        $recipe->setRestTime(0);
+
+        return $recipe;
+    }
+
+    /** Lädt ein Rezept frisch aus der Datenbank. */
+    private function findRecipeByTitle(string $title): Recipe
+    {
+        $this->em->clear();
+
+        $recipe = $this->em->getRepository(Recipe::class)->findOneBy(['title' => $title]);
+        self::assertInstanceOf(Recipe::class, $recipe, \sprintf('Rezept "%s" wurde nicht gespeichert.', $title));
+
+        return $recipe;
     }
 
     /** Erstellt und persistiert einen Benutzer. */

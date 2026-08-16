@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Form\RecipeImportType;
+use App\Import\Exception\RecipeAlreadyImportedException;
+use App\Import\Exception\RecipeImportException;
+use App\Import\RecipeImportService;
 use App\Security\RecipeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,6 +40,55 @@ class RecipeController extends AbstractController
 
         return $this->render('recipe/new.html.twig', [
             'recipe' => new Recipe(),
+        ]);
+    }
+
+    /**
+     * Importiert ein Rezept von einer unterstützten Seite und füllt damit das
+     * normale Anlege-Formular vor. Gespeichert wird erst durch den Nutzer.
+     *
+     * Muss – wie recipe_new – VOR recipe_show stehen.
+     */
+    #[Route('/rezept/importieren', name: 'recipe_import', methods: ['GET', 'POST'])]
+    public function import(Request $request, RecipeImportService $importService): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(RecipeImportType::class);
+        $form->handleRequest($request);
+
+        // Bereits importiertes Rezept – wird im Template als Hinweis mit Link
+        // gerendert (Flash-Nachrichten werden escaped und können keinen
+        // Link enthalten).
+        $duplicate = null;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var array{url: string} $data */
+            $data = $form->getData();
+
+            try {
+                $recipe = $importService->import($data['url']);
+
+                $this->addFlash('success', \sprintf('Rezept von %s geladen. Bitte prüfen und speichern.', $recipe->getSourceName() ?? 'der Quelle'));
+
+                return $this->render('recipe/new.html.twig', [
+                    'recipe' => $recipe,
+                    'sourceUrl' => $recipe->getSourceUrl(),
+                    'sourceName' => $recipe->getSourceName(),
+                    'importedAuthor' => $recipe->getAuthor(),
+                ]);
+            } catch (RecipeAlreadyImportedException $e) {
+                $duplicate = $e->existingRecipe;
+            } catch (RecipeImportException) {
+                // Details (Timeouts, geänderte APIs) gehören nicht in die UI.
+                $this->addFlash('error', 'Das Rezept konnte nicht geladen werden. Bitte die URL prüfen und es später erneut versuchen.');
+            }
+        }
+
+        return $this->render('recipe/import.html.twig', [
+            'form' => $form,
+            'sources' => $importService->getSupportedSourceNames(),
+            'duplicate' => $duplicate,
         ]);
     }
 

@@ -37,6 +37,7 @@ security:
         - { path: ^/registrieren, roles: PUBLIC_ACCESS }
         - { path: ^/passwort,     roles: PUBLIC_ACCESS }
         - { path: ^/rezept/neu,   roles: ROLE_USER }
+        - { path: ^/rezept/importieren, roles: ROLE_USER }
 
 when@test:
     security:

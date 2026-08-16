@@ -66,12 +66,34 @@
                     <span class="time-value">{{ recipe.cookTime }} Min.</span>
                     <span class="time-label">Kochzeit</span>
                 </div>
+                {% if recipe.restTime > 0 %}
+                    <div class="time-card">
+                        <svg width="22" height="22" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><circle cx="12" cy="12" r="6"/></svg>
+                        <span class="time-value">{{ recipe.restTime }} Min.</span>
+                        <span class="time-label">Ruhezeit</span>
+                    </div>
+                {% endif %}
                 <div class="time-card highlight">
                     <svg width="22" height="22" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     <span class="time-value">{{ recipe.totalTime }} Min.</span>
-                    <span class="time-label">Gesamt</span>
+                    <span class="time-label">Aktiv gesamt</span>
                 </div>
             </div>
+
+            {% if recipe.tags|length > 0 %}
+                <ul class="recipe-tags">
+                    {% for tag in recipe.tags %}
+                        <li class="recipe-tag">{{ tag.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if recipe.isImported %}
+                <p class="recipe-source">
+                    Quelle:
+                    <a href="{{ recipe.sourceUrl }}" target="_blank" rel="noopener noreferrer nofollow">{{ recipe.sourceName }}</a>
+                </p>
+            {% endif %}
         </header>
 
         <div class="recipe-body">

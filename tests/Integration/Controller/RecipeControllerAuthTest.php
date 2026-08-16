@@ -21,9 +21,11 @@ class RecipeControllerAuthTest extends WebTestCase
         $connection = $em->getConnection();
 
         // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
         $connection->executeStatement('DELETE FROM recipe');
+        $connection->executeStatement('DELETE FROM tag');
         $connection->executeStatement('DELETE FROM reset_password_request');
         $connection->executeStatement('DELETE FROM app_user');
 

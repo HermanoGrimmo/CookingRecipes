@@ -8,6 +8,7 @@ use App\Entity\Recipe;
 use App\Entity\User;
 use App\Form\RecipeType;
 use App\Security\RecipeVoter;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -43,6 +44,25 @@ final class RecipeForm extends AbstractController
     /** Beschriftung des Submit-Buttons. */
     #[LiveProp]
     public string $submitLabel = 'Rezept speichern';
+
+    /**
+     * Herkunftsdaten eines importierten Rezepts.
+     *
+     * Diese Felder sind bewusst KEINE Formularfelder: Sie sollen vom Nutzer
+     * nicht bearbeitet werden und würden über den Live-Component-Roundtrip
+     * verloren gehen, weil sie nicht in den formValues stecken. Als nicht
+     * schreibbare LiveProps sind sie Checksummen-signiert und damit auch
+     * nicht manipulierbar.
+     */
+    #[LiveProp(writable: false)]
+    public ?string $sourceUrl = null;
+
+    #[LiveProp(writable: false)]
+    public ?string $sourceName = null;
+
+    /** Original-Autor der Quelle (überschreibt den Namen des Benutzers). */
+    #[LiveProp(writable: false)]
+    public ?string $importedAuthor = null;
 
     public function __construct(private readonly EntityManagerInterface $em)
     {
@@ -131,7 +151,21 @@ final class RecipeForm extends AbstractController
                 throw new \LogicException('Kein eingeloggter Benutzer vorhanden.');
             }
             $recipe->setOwner($user);
-            $recipe->setAuthor($user->getFullName());
+
+            // Twig übergibt nicht gesetzte Props als Leerstring – leer zählt
+            // hier wie "nicht importiert".
+            $importedAuthor = $this->nullIfBlank($this->importedAuthor);
+            $sourceUrl = $this->nullIfBlank($this->sourceUrl);
+
+            // Importierte Rezepte behalten den Autor der Quelle; manuell
+            // angelegte bekommen wie bisher den Namen des Benutzers.
+            $recipe->setAuthor($importedAuthor ?? $user->getFullName());
+
+            if (null !== $sourceUrl) {
+                $recipe->setSourceUrl($sourceUrl);
+                $recipe->setSourceName($this->nullIfBlank($this->sourceName));
+                $recipe->setImportedAt(new \DateTimeImmutable());
+            }
         }
 
         // Sortierung von Zutaten und Schritten anhand der Formular-Reihenfolge fixieren.
@@ -149,7 +183,25 @@ final class RecipeForm extends AbstractController
         if ($isNew) {
             $this->em->persist($recipe);
         }
-        $this->em->flush();
+
+        try {
+            $this->em->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            // Zwei Unique-Indizes können hier zuschlagen: recipe.source_url
+            // (dieselbe Quelle wurde zwischenzeitlich anderswo importiert)
+            // oder tag.name (ein neuer Tag wurde parallel von einem anderen
+            // Request angelegt – TagResolver dedupliziert nur pro Request).
+            // Postgres faltet unquotierte Bezeichner auf Kleinschreibung, der
+            // Indexname steht daher als "uniq_recipe_source_url" bzw.
+            // "uniq_tag_name" in der Fehlermeldung.
+            $message = str_contains(strtolower($e->getMessage()), 'source_url')
+                ? 'Dieses Rezept wurde inzwischen bereits aus derselben Quelle gespeichert.'
+                : 'Das Rezept konnte nicht gespeichert werden (ein verwendeter Tag wurde zeitgleich angelegt). Bitte versuche es erneut.';
+
+            $this->addFlash('error', $message);
+
+            return $this->redirectToRoute('recipe_index');
+        }
 
         $this->addFlash(
             'success',
@@ -157,5 +209,13 @@ final class RecipeForm extends AbstractController
         );
 
         return $this->redirectToRoute('recipe_show', ['id' => $recipe->getId()]);
+    }
+
+    /** Liefert den getrimmten Wert oder NULL, wenn er leer ist. */
+    private function nullIfBlank(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        return '' === $value ? null : $value;
     }
 }

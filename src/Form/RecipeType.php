@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Recipe;
+use App\Form\DataTransformer\TagsToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -19,6 +20,10 @@ use Symfony\Component\Validator\Constraints\Range;
 /** @extends AbstractType<Recipe> */
 class RecipeType extends AbstractType
 {
+    public function __construct(private readonly TagsToStringTransformer $tagsTransformer)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -55,6 +60,12 @@ class RecipeType extends AbstractType
                 'attr' => ['min' => 0, 'class' => 'input'],
                 'constraints' => [new Range(min: 0)],
             ])
+            ->add('restTime', IntegerType::class, [
+                'label' => 'Ruhezeit (Min.)',
+                'help' => 'Zeit ohne aktive Arbeit, z. B. Teig gehen lassen oder Einweichen.',
+                'attr' => ['min' => 0, 'class' => 'input'],
+                'constraints' => [new Range(min: 0)],
+            ])
             ->add('difficulty', ChoiceType::class, [
                 'label' => 'Schwierigkeitsgrad',
                 'choices' => [
@@ -63,6 +74,12 @@ class RecipeType extends AbstractType
                     'Schwer' => 'schwer',
                 ],
                 'attr' => ['class' => 'input'],
+            ])
+            ->add('tags', TextType::class, [
+                'label' => 'Tags',
+                'required' => false,
+                'help' => 'Kommagetrennt, z. B. „Pasta, Vegetarisch, Hauptspeise".',
+                'attr' => ['placeholder' => 'Pasta, Vegetarisch, Hauptspeise', 'class' => 'input'],
             ])
             ->add('ingredients', CollectionType::class, [
                 'label' => false,
@@ -82,6 +99,10 @@ class RecipeType extends AbstractType
                 'prototype' => true,
                 'prototype_name' => '__step_index__',
             ]);
+
+        // Tags werden als kommaseparierter Text bearbeitet; der Transformer
+        // löst die Namen zu Tag-Entitäten auf (bestehende werden wiederverwendet).
+        $builder->get('tags')->addModelTransformer($this->tagsTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

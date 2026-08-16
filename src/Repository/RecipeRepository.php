@@ -57,4 +57,14 @@ class RecipeRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * Sucht ein bereits importiertes Rezept anhand seiner Quell-URL.
+     *
+     * Wird vor jedem Import aufgerufen, um Doppel-Importe zu erkennen.
+     */
+    public function findOneBySourceUrl(string $sourceUrl): ?Recipe
+    {
+        return $this->findOneBy(['sourceUrl' => $sourceUrl]);
+    }
 }

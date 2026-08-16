@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rezept importieren – CookingRecipes{% endblock %}
+
+{% block body %}
+<div class="form-page">
+    <div class="container">
+        <div class="form-page-header">
+            <a href="{{ path('recipe_index') }}" class="back-link">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Alle Rezepte
+            </a>
+            <h1 class="form-page-title">Rezept importieren</h1>
+            <p class="form-page-subtitle">
+                Füge die Adresse eines Rezepts von {{ sources|join(' oder ') }} ein.
+                Das Rezept wird geladen und ins Formular übernommen – gespeichert wird erst,
+                wenn du es geprüft hast.
+            </p>
+        </div>
+
+        {% if duplicate %}
+            <div class="flash flash-warning">
+                Dieses Rezept wurde bereits importiert:
+                <a href="{{ path('recipe_show', {id: duplicate.id}) }}">{{ duplicate.title }}</a>
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {attr: {class: 'recipe-form'}}) }}
+            <section class="form-section">
+                <div class="form-grid">
+                    <div class="form-group form-col-full">
+                        {{ form_label(form.url) }}
+                        {{ form_widget(form.url) }}
+                        {{ form_errors(form.url) }}
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <a href="{{ path('recipe_new') }}" class="btn btn-secondary">Stattdessen selbst anlegen</a>
+                <button type="submit" class="btn btn-primary">Rezept laden</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
