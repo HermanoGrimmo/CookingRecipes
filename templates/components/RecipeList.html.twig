@@ -11,80 +11,125 @@
                 value="{{ search }}"
             >
         </div>
-
         <div class="filter-controls">
             <label class="filter-label">
                 Schwierigkeit
                 <select class="input" data-model="difficulty">
-                    <option value="">Alle</option>
-                    <option value="einfach">Einfach</option>
-                    <option value="mittel">Mittel</option>
-                    <option value="schwer">Schwer</option>
+                    <option value=""{{ difficulty == '' ? ' selected' : '' }}>Alle</option>
+                    <option value="einfach"{{ difficulty == 'einfach' ? ' selected' : '' }}>Einfach</option>
+                    <option value="mittel"{{ difficulty == 'mittel' ? ' selected' : '' }}>Mittel</option>
+                    <option value="schwer"{{ difficulty == 'schwer' ? ' selected' : '' }}>Schwer</option>
                 </select>
             </label>
-
+            <label class="filter-label">
+                Tags
+                <select class="input tag-filter" data-model="tagIds" multiple size="4">
+                    {% for tag in this.availableTags %}
+                        <option value="{{ tag.id }}"{{ tag.id in tagIds ? ' selected' : '' }}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
             <label class="filter-label">
                 Sortierung
                 <select class="input" data-model="sortBy">
-                    <option value="newest">Neueste zuerst</option>
-                    <option value="oldest">Älteste zuerst</option>
-                    <option value="title">Titel (A–Z)</option>
-                    <option value="time">Kürzeste Zeit</option>
+                    <option value="newest"{{ sortBy == 'newest' ? ' selected' : '' }}>Neueste zuerst</option>
+                    <option value="oldest"{{ sortBy == 'oldest' ? ' selected' : '' }}>Älteste zuerst</option>
+                    <option value="title"{{ sortBy == 'title' ? ' selected' : '' }}>Titel (A–Z)</option>
+                    <option value="time"{{ sortBy == 'time' ? ' selected' : '' }}>Kürzeste Zeit</option>
                 </select>
             </label>
         </div>
     </div>
 
-    {% set recipes = this.recipes %}
+    {% set recipePage = this.recipePage %}
+    {% set personalRatings = this.personalRatings(recipePage.items) %}
     <section class="recipes-grid">
-        {% if recipes is empty %}
+        {% if recipePage.items is empty %}
             <div class="empty-state">
                 <span class="empty-icon">📖</span>
                 <h2>Keine Rezepte gefunden</h2>
-                <p>Versuche, die Filter anzupassen oder einen anderen Suchbegriff zu verwenden.</p>
+                <p>Versuche, die Filter anzupassen.</p>
             </div>
         {% else %}
             <div class="grid">
-                {% for recipe in recipes %}
-                    <a href="{{ path('recipe_show', {id: recipe.id}) }}" class="recipe-card">
-                        <div class="card-image">
-                            {% if recipe.imagePath %}
-                                <img src="{{ recipe.imagePath }}" alt="{{ recipe.title }}" loading="lazy">
-                            {% else %}
-                                <div class="card-image-placeholder">🍽️</div>
-                            {% endif %}
-                            <span class="card-badge">{{ recipe.difficulty }}</span>
-                        </div>
-                        <div class="card-body">
-                            <h2 class="card-title">{{ recipe.title }}</h2>
-                            {% if recipe.description %}
-                                <p class="card-description">{{ recipe.description|length > 100 ? recipe.description|slice(0, 100) ~ '...' : recipe.description }}</p>
-                            {% endif %}
+                {% for recipe in recipePage.items %}
+                    <article class="recipe-card">
+                        <a href="{{ path('recipe_show', {id: recipe.id}) }}" class="recipe-card-link">
+                            <div class="card-image">
+                                {% if recipe.imagePath %}
+                                    <img src="{{ recipe.imagePath }}" alt="{{ recipe.title }}" loading="lazy">
+                                {% else %}
+                                    <div class="card-image-placeholder">🍽️</div>
+                                {% endif %}
+                                <span class="card-badge">{{ recipe.difficulty }}</span>
+                            </div>
+                            <div class="card-body">
+                                <h2 class="card-title">{{ recipe.title }}</h2>
+                                {% if recipe.description %}
+                                    <p class="card-description">{{ recipe.description|length > 100 ? recipe.description|slice(0, 100) ~ '...' : recipe.description }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="card-body card-rating-area">
+                            <twig:RecipeRating :recipe="recipe" :personalScore="personalRatings[recipe.id] ?? null" key="rating-card-{{ recipe.id }}" />
                             <div class="card-meta">
-                                <div class="card-rating">
-                                    {% set fullStars = recipe.rating|round(0, 'floor') %}
-                                    {% for i in 1..5 %}
-                                        {% if i <= fullStars %}
-                                            <span class="star filled">★</span>
-                                        {% else %}
-                                            <span class="star">★</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <span class="rating-count">({{ recipe.ratingCount }})</span>
-                                </div>
-                                <div class="card-time">
-                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                                    {{ recipe.totalTime }} Min.
-                                </div>
+                                <div class="card-time">{{ recipe.totalTime }} Min.</div>
                             </div>
                             <div class="card-footer">
                                 <span class="card-author">von {{ recipe.author }}</span>
                                 <span class="card-servings">{{ recipe.servings }} Portionen</span>
                             </div>
                         </div>
-                    </a>
+                    </article>
                 {% endfor %}
             </div>
         {% endif %}
     </section>
+
+    {% if recipePage.totalPages > 1 %}
+        <nav class="pagination" aria-label="Rezeptseiten">
+            <button
+                type="button"
+                aria-label="Vorherige Seite"
+                {{ recipePage.page == 1 ? 'disabled' : '' }}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ recipePage.page - 1 }}"
+            >Zurück</button>
+
+            {% set startPage = max(2, recipePage.page - 2) %}
+            {% set endPage = min(recipePage.totalPages - 1, recipePage.page + 2) %}
+            {% set visiblePages = [1] %}
+            {% if startPage <= endPage %}
+                {% set visiblePages = visiblePages|merge(startPage..endPage) %}
+            {% endif %}
+            {% set visiblePages = visiblePages|merge([recipePage.totalPages]) %}
+
+            {% set previousPage = 0 %}
+            {% for pageNumber in visiblePages %}
+                {% if previousPage > 0 and pageNumber > previousPage + 1 %}
+                    <span class="pagination-ellipsis" aria-hidden="true">…</span>
+                {% endif %}
+                <button
+                    type="button"
+                    aria-label="Seite {{ pageNumber }}"
+                    aria-current="{{ pageNumber == recipePage.page ? 'page' : 'false' }}"
+                    {{ pageNumber == recipePage.page ? 'disabled' : '' }}
+                    data-action="live#action"
+                    data-live-action-param="goToPage"
+                    data-live-page-param="{{ pageNumber }}"
+                >{{ pageNumber }}</button>
+                {% set previousPage = pageNumber %}
+            {% endfor %}
+
+            <button
+                type="button"
+                aria-label="Nächste Seite"
+                {{ recipePage.page == recipePage.totalPages ? 'disabled' : '' }}
+                data-action="live#action"
+                data-live-action-param="goToPage"
+                data-live-page-param="{{ recipePage.page + 1 }}"
+            >Weiter</button>
+        </nav>
+    {% endif %}
 </div>

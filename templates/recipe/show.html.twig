@@ -40,18 +40,9 @@
                 <span>{{ recipe.author }}</span>
             </div>
 
-            {# Bewertung #}
+            {# Persönliche Bewertung und allgemeiner Durchschnitt #}
             <div class="recipe-rating">
-                {% set fullStars = recipe.rating|round(0, 'floor') %}
-                {% for i in 1..5 %}
-                    {% if i <= fullStars %}
-                        <span class="star filled">★</span>
-                    {% else %}
-                        <span class="star">★</span>
-                    {% endif %}
-                {% endfor %}
-                <span class="rating-value">{{ recipe.rating }}</span>
-                <span class="rating-count">({{ recipe.ratingCount }} Bewertungen)</span>
+                <twig:RecipeRating :recipe="recipe" :personalScore="personalScore" key="rating-detail-{{ recipe.id }}" />
             </div>
 
             {# Zeitangaben-Karten #}

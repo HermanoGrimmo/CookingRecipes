@@ -42,9 +42,7 @@ class LoadFixturesCommand extends Command
             ->setServings(4)
             ->setPrepTime(30)
             ->setCookTime(0)
-            ->setDifficulty('einfach')
-            ->setRating('4.2')
-            ->setRatingCount(156);
+            ->setDifficulty('einfach');
 
         $curryIngredients = [
             [null, '2', null, 'Möhren'],
@@ -99,9 +97,7 @@ class LoadFixturesCommand extends Command
             ->setServings(4)
             ->setPrepTime(45)
             ->setCookTime(60)
-            ->setDifficulty('mittel')
-            ->setRating('4.7')
-            ->setRatingCount(3217);
+            ->setDifficulty('mittel');
 
         $lasagneIngredients = [
             ['Für die Bolognese', null, null, 'Olivenöl'],
@@ -160,9 +156,7 @@ class LoadFixturesCommand extends Command
             ->setServings(2)
             ->setPrepTime(10)
             ->setCookTime(12)
-            ->setDifficulty('einfach')
-            ->setRating('4.5')
-            ->setRatingCount(842);
+            ->setDifficulty('einfach');
 
         $aglioIngredients = [
             [null, '250', 'g', 'Spaghetti'],
