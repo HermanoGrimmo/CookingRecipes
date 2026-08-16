@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Integrationstests für die Filter- und Sortierlogik von RecipeRepository::findFiltered().
+ * Integrationstests für die paginierte Filter- und Sortierlogik.
  */
 class RecipeRepositoryTest extends KernelTestCase
 {
@@ -35,6 +35,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $connection = $this->em->getConnection();
 
         // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM recipe_rating');
         $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
@@ -66,7 +67,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Ohne Quelle 1');
         $this->createRecipe('Ohne Quelle 2');
 
-        self::assertCount(2, $this->repository->findFiltered(null, null, 'newest'));
+        self::assertCount(2, $this->repository->findFilteredPage(null, null, [], 'newest', 1)->items);
     }
 
     /** Die Suche findet Rezepte unabhängig von Groß-/Kleinschreibung im Titel. */
@@ -75,7 +76,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Cashew Hähnchen-Curry');
         $this->createRecipe('Apfelkuchen');
 
-        $result = $this->repository->findFiltered('CURRY', null, 'newest');
+        $result = $this->repository->findFilteredPage('CURRY', null, [], 'newest', 1)->items;
 
         self::assertCount(1, $result);
         self::assertSame('Cashew Hähnchen-Curry', $result[0]->getTitle());
@@ -87,7 +88,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Apfelkuchen', description: 'Mit Zimt und Streuseln');
         $this->createRecipe('Brownies');
 
-        $result = $this->repository->findFiltered('zimt', null, 'newest');
+        $result = $this->repository->findFilteredPage('zimt', null, [], 'newest', 1)->items;
 
         self::assertCount(1, $result);
         self::assertSame('Apfelkuchen', $result[0]->getTitle());
@@ -100,13 +101,13 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Vanillepudding');
 
         // "%" darf nur das Rezept mit literalem Prozentzeichen finden – nicht alle.
-        $result = $this->repository->findFiltered('100%', null, 'newest');
+        $result = $this->repository->findFilteredPage('100%', null, [], 'newest', 1)->items;
 
         self::assertCount(1, $result);
         self::assertSame('100% Schokoladenkuchen', $result[0]->getTitle());
 
         // Ein einzelnes "_" darf nicht als Ein-Zeichen-Wildcard wirken.
-        self::assertCount(0, $this->repository->findFiltered('_', null, 'newest'));
+        self::assertCount(0, $this->repository->findFilteredPage('_', null, [], 'newest', 1)->items);
     }
 
     /** Der Schwierigkeits-Filter liefert nur Rezepte mit exakt diesem Schwierigkeitsgrad. */
@@ -115,7 +116,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Spiegelei', difficulty: 'einfach');
         $this->createRecipe('Soufflé', difficulty: 'schwer');
 
-        $result = $this->repository->findFiltered(null, 'schwer', 'newest');
+        $result = $this->repository->findFilteredPage(null, 'schwer', [], 'newest', 1)->items;
 
         self::assertCount(1, $result);
         self::assertSame('Soufflé', $result[0]->getTitle());
@@ -127,7 +128,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Zwiebelsuppe');
         $this->createRecipe('Apfelkuchen');
 
-        $result = $this->repository->findFiltered(null, null, 'title');
+        $result = $this->repository->findFilteredPage(null, null, [], 'title', 1)->items;
 
         self::assertSame(
             ['Apfelkuchen', 'Zwiebelsuppe'],
@@ -142,7 +143,7 @@ class RecipeRepositoryTest extends KernelTestCase
         $this->createRecipe('Langsam', prepTime: 60, cookTime: 120);
         $this->createRecipe('Mittel', prepTime: 20, cookTime: 20);
 
-        $result = $this->repository->findFiltered(null, null, 'time');
+        $result = $this->repository->findFilteredPage(null, null, [], 'time', 1)->items;
 
         self::assertSame(
             ['Schnell', 'Mittel', 'Langsam'],

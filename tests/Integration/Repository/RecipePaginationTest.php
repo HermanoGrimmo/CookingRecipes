@@ -26,6 +26,7 @@ final class RecipePaginationTest extends KernelTestCase
     protected function tearDown(): void
     {
         $connection = $this->em->getConnection();
+        $connection->executeStatement('DELETE FROM recipe_rating');
         $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');

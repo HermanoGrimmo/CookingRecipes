@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\RecipeRating;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,6 +22,7 @@ class RecipeControllerAuthTest extends WebTestCase
         $connection = $em->getConnection();
 
         // Testdaten bereinigen (Reihenfolge beachtet FK-Constraints)
+        $connection->executeStatement('DELETE FROM recipe_rating');
         $connection->executeStatement('DELETE FROM recipe_tag');
         $connection->executeStatement('DELETE FROM ingredient');
         $connection->executeStatement('DELETE FROM step');
@@ -54,6 +56,23 @@ class RecipeControllerAuthTest extends WebTestCase
         $client->request('GET', '/rezept/neu');
 
         $this->assertResponseIsSuccessful();
+    }
+
+    /** Die Detailseite übergibt die persönliche Bewertung an die Komponente. */
+    public function testShowRendersPersonalScoreForAuthenticatedUser(): void
+    {
+        $client = static::createClient();
+        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $user = $this->createTestUser($em, 'rating-detail@example.com');
+        $recipe = $this->createTestRecipe($em, $user);
+        $em->persist(new RecipeRating($recipe, $user, 4));
+        $em->flush();
+
+        $client->loginUser($user);
+        $client->request('GET', '/rezept/' . $recipe->getId());
+
+        $this->assertResponseIsSuccessful();
+        self::assertCount(1, $client->getCrawler()->filter('button.rating-star[data-live-score-param="4"][aria-pressed="true"]'));
     }
 
     /** Fremdes Rezept bearbeiten führt zu 403 Forbidden. */

@@ -12,6 +12,7 @@ use App\Repository\RecipeRatingRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\TagRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -33,12 +34,14 @@ final class RecipeList
     #[LiveProp(writable: true, onUpdated: 'resetPage')]
     public string $sortBy = 'newest';
 
-    /** @var list<int> */
-    #[LiveProp(writable: true, onUpdated: 'resetPage')]
+    /** @var list<mixed> Rohwerte des Mehrfach-Selects */
+    #[LiveProp(writable: true, onUpdated: 'normalizeTagIds')]
     public array $tagIds = [];
 
-    #[LiveProp(writable: true)]
+    #[LiveProp]
     public int $page = 1;
+
+    private ?RecipePage $recipePage = null;
 
     public function __construct(
         private readonly RecipeRepository $recipeRepository,
@@ -50,16 +53,7 @@ final class RecipeList
 
     public function getRecipePage(): RecipePage
     {
-        $result = $this->recipeRepository->findFilteredPage(
-            '' === $this->search ? null : $this->search,
-            '' === $this->difficulty ? null : $this->difficulty,
-            array_map('intval', $this->tagIds),
-            $this->sortBy,
-            $this->page,
-        );
-        $this->page = $result->page;
-
-        return $result;
+        return $this->recipePage ??= $this->loadRecipePage($this->page);
     }
 
     /** @return list<Tag> */
@@ -86,11 +80,42 @@ final class RecipeList
     #[LiveAction]
     public function goToPage(#[LiveArg] int $page): void
     {
-        $this->page = max(1, $page);
+        $this->recipePage = $this->loadRecipePage(max(1, $page));
+        $this->page = $this->recipePage->page;
     }
 
-    public function resetPage(): void
+    public function resetPage(mixed $previousValue = null): void
     {
         $this->page = 1;
+        $this->recipePage = null;
+    }
+
+    public function normalizeTagIds(mixed $previousValue = null): void
+    {
+        if (\count($this->tagIds) > 50) {
+            throw new BadRequestHttpException('Es dürfen höchstens 50 Tags ausgewählt werden.');
+        }
+
+        $normalized = [];
+        foreach ($this->tagIds as $tagId) {
+            if ((!\is_int($tagId) && (!\is_string($tagId) || !ctype_digit($tagId))) || (int) $tagId < 1) {
+                throw new BadRequestHttpException('Tag-IDs müssen positive ganze Zahlen sein.');
+            }
+            $normalized[] = (int) $tagId;
+        }
+
+        $this->tagIds = array_values(array_unique($normalized));
+        $this->resetPage($previousValue);
+    }
+
+    private function loadRecipePage(int $page): RecipePage
+    {
+        return $this->recipeRepository->findFilteredPage(
+            '' === $this->search ? null : $this->search,
+            '' === $this->difficulty ? null : $this->difficulty,
+            array_map('intval', $this->tagIds),
+            $this->sortBy,
+            $page,
+        );
     }
 }

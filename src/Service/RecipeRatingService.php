@@ -41,6 +41,11 @@ final readonly class RecipeRatingService
         });
     }
 
+    public function personalScore(Recipe $recipe, ?User $user): ?int
+    {
+        return null === $user ? null : $this->ratingRepository->findForUserAndRecipe($user, $recipe)?->getScore();
+    }
+
     public function remove(Recipe $recipe, User $user): void
     {
         $this->entityManager->wrapInTransaction(function () use ($recipe, $user): void {

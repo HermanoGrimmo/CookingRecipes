@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Dto\RecipePage;
 use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,19 +19,6 @@ class RecipeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Recipe::class);
-    }
-
-    /**
-     * Bestehende, ungepaginierte Schnittstelle für interne Aufrufer.
-     *
-     * @return list<Recipe>
-     */
-    public function findFiltered(?string $search, ?string $difficulty, string $sortBy): array
-    {
-        /** @var list<Recipe> $recipes */
-        $recipes = $this->createFilteredQuery($search, $difficulty, [], $sortBy)->getQuery()->getResult();
-
-        return $recipes;
     }
 
     /**
@@ -70,7 +58,7 @@ class RecipeRepository extends ServiceEntityRepository
     /**
      * @param list<int> $tagIds
      */
-    private function createFilteredQuery(?string $search, ?string $difficulty, array $tagIds, string $sortBy): \Doctrine\ORM\QueryBuilder
+    private function createFilteredQuery(?string $search, ?string $difficulty, array $tagIds, string $sortBy): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
 

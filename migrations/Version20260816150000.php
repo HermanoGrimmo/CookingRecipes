@@ -7,7 +7,13 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/** Persistente Rezeptbewertungen mit anonymem Erhalt bei Kontolöschung. */
+/**
+ * Persistente Rezeptbewertungen mit anonymem Erhalt bei Kontolöschung.
+ *
+ * ACHTUNG: Die Migration verwirft absichtlich alle bisherigen, nicht durch
+ * Einzelbewertungen belegbaren Aggregate. Diese Werte können beim Rollback
+ * nicht rekonstruiert werden; down() entfernt zusätzlich alle Einzelstimmen.
+ */
 final class Version20260816150000 extends AbstractMigration
 {
     public function getDescription(): string

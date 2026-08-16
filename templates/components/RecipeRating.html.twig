@@ -1,7 +1,7 @@
 <div{{ attributes }} class="rating-widget">
-    <div class="rating-stars" aria-label="Persönliche Bewertung">
+    <div class="rating-stars" role="group" aria-label="Persönliche Bewertung">
         {% for score in 1..5 %}
-            {% if app.user %}
+            {% if this.canRate %}
                 <button
                     type="button"
                     class="rating-star{{ personalScore is not null and score <= personalScore ? ' filled' : '' }}"
@@ -12,12 +12,23 @@
                     data-live-score-param="{{ score }}"
                 >★</button>
             {% else %}
-                <span class="rating-star{{ score <= recipe.rating|round(0, 'floor') ? ' filled' : '' }}" aria-hidden="true">★</span>
+                <span
+                    class="rating-star{{ score <= recipe.rating|round(0, 'floor') ? ' filled' : '' }}"
+                    aria-hidden="true"
+                >★</span>
             {% endif %}
         {% endfor %}
     </div>
-    <span class="rating-average" aria-label="Allgemeine Bewertung">Ø {{ recipe.rating }} ({{ recipe.ratingCount }})</span>
-    {% if app.user and personalScore is not null %}
-        <button type="button" class="rating-remove" data-action="live#action" data-live-action-param="remove">Bewertung entfernen</button>
+    <span class="rating-average">
+        <span class="visually-hidden">Allgemeine Bewertung:</span>
+        Ø {{ recipe.rating }} ({{ recipe.ratingCount }})
+    </span>
+    {% if this.canRate and personalScore is not null %}
+        <button
+            type="button"
+            class="rating-remove"
+            data-action="live#action"
+            data-live-action-param="remove"
+        >Bewertung entfernen</button>
     {% endif %}
 </div>

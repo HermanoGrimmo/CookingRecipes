@@ -8,7 +8,9 @@ use App\Entity\Recipe;
 use App\Entity\User;
 use App\Twig\Components\RecipeRating;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\UX\LiveComponent\Test\InteractsWithLiveComponents;
 
@@ -64,6 +66,29 @@ final class RecipeRatingTest extends KernelTestCase
         self::assertNotNull($reloaded);
         self::assertSame('4.0', $reloaded->getRating());
         self::assertSame(1, $reloaded->getRatingCount());
+    }
+
+    #[DataProvider('invalidScores')]
+    public function testManipulierteBewertungWirdAlsBadRequestAbgewiesen(mixed $score): void
+    {
+        $user = $this->createUser();
+        $recipe = $this->createRecipe();
+        $this->em->flush();
+        $component = $this->createLiveComponent(RecipeRating::class, ['recipe' => $recipe])->actingAs($user);
+
+        $this->expectException(BadRequestHttpException::class);
+        $component->call('rate', ['score' => $score]);
+    }
+
+    /** @return iterable<string, array{mixed}> */
+    public static function invalidScores(): iterable
+    {
+        yield 'zu groß' => [99];
+        yield 'kein Integer' => ['abc'];
+        yield 'numerischer String' => ['4'];
+        yield 'Fließkommazahl' => [4.5];
+        yield 'Boolean' => [true];
+        yield 'null' => [null];
     }
 
     private function createUser(): User

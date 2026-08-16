@@ -240,7 +240,7 @@ class Recipe
      * Aktive Gesamtzeit in Minuten.
      *
      * Ruhezeit ist bewusst NICHT enthalten – siehe Kommentar an $restTime.
-     * Die Sortierung in RecipeRepository::findFiltered() rechnet identisch.
+     * Die Sortierung in RecipeRepository::createFilteredQuery() rechnet identisch.
      */
     public function getTotalTime(): int
     {

@@ -10,8 +10,8 @@ use App\Form\RecipeImportType;
 use App\Import\Exception\RecipeAlreadyImportedException;
 use App\Import\Exception\RecipeImportException;
 use App\Import\RecipeImportService;
-use App\Repository\RecipeRatingRepository;
 use App\Security\RecipeVoter;
+use App\Service\RecipeRatingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,10 +95,10 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/rezept/{id}', name: 'recipe_show', requirements: ['id' => '\d+'])]
-    public function show(Recipe $recipe, RecipeRatingRepository $ratingRepository): Response
+    public function show(Recipe $recipe, RecipeRatingService $ratingService): Response
     {
         $user = $this->getUser();
-        $personalScore = $user instanceof User ? $ratingRepository->findForUserAndRecipe($user, $recipe)?->getScore() : null;
+        $personalScore = $ratingService->personalScore($recipe, $user instanceof User ? $user : null);
 
         return $this->render('recipe/show.html.twig', [
             'recipe' => $recipe,
