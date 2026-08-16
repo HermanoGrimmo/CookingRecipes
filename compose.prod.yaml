@@ -12,7 +12,7 @@ x-php-env: &php-env
   APP_ENV: prod
   APP_DEBUG: "0"
   APP_SECRET: ${APP_SECRET:?APP_SECRET muss in .env.deploy gesetzt sein}
-  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=17&charset=utf8
   MAILER_DSN: ${MAILER_DSN:?MAILER_DSN muss in .env.deploy gesetzt sein}
   DEFAULT_URI: ${DEFAULT_URI:?DEFAULT_URI muss in .env.deploy gesetzt sein}
   HTTP_CLIENT_USER_AGENT: ${HTTP_CLIENT_USER_AGENT:-CookingRecipes/1.0 (Rezept-Import auf Nutzeranfrage)}
@@ -85,7 +85,7 @@ services:
 
   # PostgreSQL Datenbank – bewusst ohne Port-Mapping nach außen
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER muss in .env.deploy gesetzt sein}

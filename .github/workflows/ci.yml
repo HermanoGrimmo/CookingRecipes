@@ -1,0 +1,177 @@
+name: CI
+
+# Branch-Filter auf "push": ohne ihn erzeugt jeder Commit in einem Pull Request
+# zwei Runs pro Workflow – einen für push und einen für pull_request.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+
+  code-style:
+    name: Code Style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/php-setup
+
+      # Bewusst der CS-Fixer aus vendor/ und nicht das Docker-Image: nur so laufen
+      # bin/cs-fixer.sh und CI garantiert mit derselben Version.
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer check --config=.php-cs-fixer.dist.php --diff --format=checkstyle | cs2pr
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/php-setup
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/php-setup
+        with:
+          extensions: intl
+
+      # "if: always()" bei jedem Schritt: ein Fehler soll die übrigen Prüfungen
+      # nicht verschlucken, damit alle Probleme in einem Durchlauf sichtbar werden.
+      - name: Composer-Konfiguration prüfen
+        if: always()
+        run: composer validate --no-check-publish --strict
+
+      - name: YAML-Dateien prüfen
+        if: always()
+        run: php bin/console lint:yaml config --parse-tags
+
+      - name: Twig-Templates prüfen
+        if: always()
+        run: php bin/console lint:twig templates --env=prod
+
+      - name: Service-Container prüfen
+        if: always()
+        run: php bin/console lint:container --no-debug
+
+      # --skip-sync: hier steht keine Datenbank zur Verfügung, geprüft wird nur
+      # das Mapping. Den Abgleich mit der Datenbank übernimmt der tests-Job.
+      - name: Doctrine-Mapping prüfen
+        if: always()
+        run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+
+      - name: Sicherheitshinweise zu Abhängigkeiten
+        if: always()
+        run: composer audit
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # package.json referenziert @symfony/ux-live-component über einen file:-Pfad
+      # unterhalb von vendor/. Ohne composer install schlägt npm ci deshalb fehl.
+      - uses: ./.github/actions/php-setup
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: npm-Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Assets bauen
+        run: npm run build
+
+      # Nicht blockierend: betroffen sind ausschließlich devDependencies der
+      # Webpack-/Babel-Toolchain. Deren Code läuft nie in Produktion, das Ergebnis
+      # des Builds sind statische Assets. Sobald Dependabot den Bestand abgeräumt
+      # hat, kann continue-on-error entfallen.
+      - name: Sicherheitshinweise zu npm-Paketen
+        continue-on-error: true
+        run: npm audit --audit-level=high
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          # doctrine.yaml hängt im Test-Env über dbname_suffix ein "_test" an,
+          # deshalb heißt die Datenbank app_test, während DATABASE_URL auf app zeigt.
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      APP_ENV: test
+      DATABASE_URL: postgresql://app:app@localhost:5432/app?serverVersion=17&charset=utf8
+      # Version20260409222000 legt den initialen Admin-Benutzer an und bricht ohne
+      # diese Variable mit einer RuntimeException ab. Der Wert ist beliebig, da die
+      # Testdatenbank bei jedem Lauf neu entsteht.
+      ADMIN_INITIAL_PASSWORD: ci-dummy-password
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/php-setup
+        with:
+          extensions: pdo_pgsql
+
+      # Migrationen statt doctrine:schema:create – nur so werden sie überhaupt
+      # jemals ausgeführt, bevor sie in der Produktion laufen.
+      - name: Migrationen ausführen
+        run: php bin/console doctrine:migrations:migrate --no-interaction
+
+      # Schlägt an, sobald eine Entity-Änderung ohne passende Migration gemerged
+      # werden soll.
+      - name: Schema gegen Mapping prüfen
+        run: php bin/console doctrine:schema:validate
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit

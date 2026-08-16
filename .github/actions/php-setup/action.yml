@@ -1,0 +1,41 @@
+name: 'PHP einrichten'
+description: 'Installiert PHP 8.4 samt Composer-Abhängigkeiten mit Cache.'
+
+inputs:
+  extensions:
+    description: 'Zusätzliche PHP-Erweiterungen, kommagetrennt'
+    required: false
+    default: ''
+
+runs:
+  using: composite
+
+  steps:
+    - name: PHP installieren
+      uses: shivammathur/setup-php@v2
+      with:
+        # Muss zur Version im Dockerfile passen – es wird nur eine Version unterstützt.
+        php-version: '8.4'
+        coverage: none
+        extensions: ${{ inputs.extensions }}
+        tools: cs2pr
+
+    - name: Composer-Cache-Verzeichnis ermitteln
+      id: composer-cache
+      shell: bash
+      run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+    - name: Composer-Cache wiederherstellen
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    # WICHTIG: kein --no-scripts. Die auto-scripts aus composer.json rufen
+    # cache:clear auf und erzeugen dabei var/cache/dev/App_KernelDevDebugContainer.xml.
+    # Genau auf diese Datei verweist phpstan.dist.neon. Ohne sie arbeitet die
+    # PHPStan-Symfony-Extension ohne Container-Wissen – und zwar still, ohne Fehler.
+    - name: Composer-Abhängigkeiten installieren
+      shell: bash
+      run: composer install --no-progress --prefer-dist --no-interaction

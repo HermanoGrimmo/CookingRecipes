@@ -484,6 +484,23 @@ Gruppierung der Minor-/Patch-Updates kann später ergänzt werden, falls das PR-
 
 ---
 
+## Umsetzungsnotizen (Phase 0, 1 und 4 – erledigt am 2026-08-16)
+
+Alle Schritte der neuen Jobs wurden vor dem Commit lokal im PHP-Container ausgeführt. Drei Dinge kamen dabei anders als geplant:
+
+**B1 bestätigt.** `doctrine:migrations:migrate` bricht ohne `ADMIN_INITIAL_PASSWORD` tatsächlich ab – nicht nur laut Quelltext, sondern verifiziert. Mit dem Dummy-Wert laufen die vier Migrationen durch, `doctrine:schema:validate` meldet Schema und Mapping als synchron, PHPUnit ist mit 62 Tests grün.
+
+**B3 – `composer validate --strict` schlug fehl (Exit 1).** Ursache waren drei unbegrenzte Constraints (`doctrine/doctrine-bundle: >=3.2.2`, `doctrine/doctrine-migrations-bundle: >=4`, `doctrine/orm: >=3.6.3`). Unbegrenzt heißt: ein `composer update` hätte ohne Weiteres ORM 4.0 mit Breaking Changes eingezogen. Statt den neuen Check abzuschwächen wurden die Constraints auf Caret-Form umgestellt. Da alle drei Pakete exakt auf ihrer Untergrenze gelockt waren, änderte sich an der Auflösung nichts – `composer update --lock` hat lediglich den Content-Hash erneuert.
+
+**B4 – beide Audit-Schritte schlugen an.**
+
+- `composer audit`: 42 Advisories in den gelockten Symfony-8.0-Paketen, darunter CVE-2026-45075 (high, HEAD-Request umgeht `methods: ['GET']` in `#[IsGranted]` / `#[IsCsrfTokenValid]`) und CRLF-Injection in `symfony/mime`. **Produktionsrelevant.** Behoben durch `composer update "symfony/*" --with-all-dependencies`; danach meldet Composer keine Advisories mehr. Der Schritt bleibt blockierend. Nebeneffekt: `bump-after-update: true` hat die Untergrenzen einiger Constraints auf die installierten Versionen angehoben – die `8.0.*`-Constraints der Symfony-Pakete blieben unberührt.
+- `npm audit`: 10 Funde (9 high), ausschließlich in `devDependencies` der Webpack-/Babel-Toolchain. Dieser Code läuft nie in Produktion, das Build-Ergebnis sind statische Assets. Der Schritt bekam `continue-on-error: true` mit Begründung im Workflow; das kann entfallen, sobald Dependabot den Bestand abgeräumt hat.
+
+**Nicht erledigt und nicht aus dem Repo heraus erledigbar:** Schritt 1.4 (Branch-Protection auf die neuen Check-Namen umstellen).
+
+---
+
 ## Empfohlene Reihenfolge
 
 Phase 0 → 1 → 4 in einem PR (vollständig verifizierbar), danach Phase 2 in einem zweiten PR (braucht einen `main`-Push für den ersten echten GHCR-Test). Phase 3 erst, wenn der Server existiert – sonst liegt ungetesteter Code als Attrappe im Repo.

@@ -10,7 +10,7 @@ services:
     environment:
       APP_ENV: dev
       APP_DEBUG: "1"
-      DATABASE_URL: postgresql://${POSTGRES_USER:-cooking}:${POSTGRES_PASSWORD:-secret}@postgres:5432/${POSTGRES_DB:-cooking_recipes}?serverVersion=16&charset=utf8
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cooking}:${POSTGRES_PASSWORD:-secret}@postgres:5432/${POSTGRES_DB:-cooking_recipes}?serverVersion=17&charset=utf8
     depends_on:
       postgres:
         condition: service_healthy
@@ -32,7 +32,7 @@ services:
 
   # PostgreSQL Datenbank
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     ports:
       - "${POSTGRES_PORT:-5433}:5432"
     environment:
