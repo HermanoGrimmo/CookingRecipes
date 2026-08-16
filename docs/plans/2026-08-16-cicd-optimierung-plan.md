@@ -503,7 +503,20 @@ Die Composite Action setzt deshalb `ini-values: variables_order=EGPCS` und gleic
 
 > **Anmerkung:** Dass die Migration auf `$_ENV` statt auf `$_SERVER` oder `getenv()` zugreift, ist die eigentliche Fragilität. Der Zugriff funktioniert nur, solange `variables_order` ein `E` enthält. Eine Umstellung der Migration wäre robuster, wurde hier aber bewusst nicht vorgenommen – sie ist bereits produktiv gelaufen und gehört nicht in einen CI-Umbau.
 
-**Nicht erledigt und nicht aus dem Repo heraus erledigbar:** Schritt 1.4 (Branch-Protection auf die neuen Check-Namen umstellen).
+### Phase 2 (erledigt am 2026-08-16)
+
+Der Job `build-images` wurde wie geplant ergänzt. Da der Entwicklungsrechner ein Apple-Silicon-Mac ist, konnten beide Images vorab **nativ in der Zielarchitektur** gebaut werden – dieselbe `linux/arm64`, die später auf der CAX-Instanz läuft:
+
+| Image | Größe | Architektur |
+|---|---|---|
+| `production` | 66 MB | `arm64/linux` |
+| `nginx` | 22 MB | `arm64/linux` |
+
+Inhaltlich geprüft: `public/build/entrypoints.json` vorhanden, `vendor/` vorhanden, `tests/` korrekt über `.dockerignore` ausgeschlossen, Composer-Binary aus dem Produktions-Image entfernt, Prozessbenutzer `www-data`. Der `cache:warmup` in der `production`-Stufe läuft durch.
+
+`nginx -t` schlägt außerhalb des Compose-Netzes mit `host not found in upstream "php"` fehl – das ist erwartetes Verhalten und kein Defekt, da der Upstream erst zur Laufzeit im gemeinsamen Netz existiert.
+
+**Nicht erledigt und nicht aus dem Repo heraus erledigbar:** Schritt 1.4 (Branch-Protection auf die neuen Check-Namen umstellen) und Schritt 2.2 (Sichtbarkeit der GHCR-Pakete nach dem ersten Push).
 
 ---
 
