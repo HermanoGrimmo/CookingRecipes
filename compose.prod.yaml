@@ -1,0 +1,110 @@
+# Produktions-Setup: eigene Images für PHP-FPM und Nginx, keine Bind-Mounts,
+# keine Entwicklungsdienste (Mailpit, Node) und keine offenen Datenbank-Ports.
+#
+# Aufruf:
+#   docker compose --env-file .env.deploy -f compose.prod.yaml up -d --build
+#
+# Die Variablen stammen bewusst aus .env.deploy und nicht aus .env, damit sich
+# Docker-Compose-Variablen und Symfony-Dotenv nicht in die Quere kommen.
+
+# Umgebungsvariablen der Anwendung
+x-php-env: &php-env
+  APP_ENV: prod
+  APP_DEBUG: "0"
+  APP_SECRET: ${APP_SECRET:?APP_SECRET muss in .env.deploy gesetzt sein}
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
+  MAILER_DSN: ${MAILER_DSN:?MAILER_DSN muss in .env.deploy gesetzt sein}
+  DEFAULT_URI: ${DEFAULT_URI:?DEFAULT_URI muss in .env.deploy gesetzt sein}
+  HTTP_CLIENT_USER_AGENT: ${HTTP_CLIENT_USER_AGENT:-CookingRecipes/1.0 (Rezept-Import auf Nutzeranfrage)}
+  # Der TLS-Proxy läuft im selben Docker-Netz, daher privaten Adressbereichen
+  # vertrauen. Nur so erkennt Symfony HTTPS und erzeugt korrekte absolute URLs.
+  SYMFONY_TRUSTED_PROXIES: private_ranges
+
+# Gemeinsame Basis für alle Container, die das Anwendungs-Image nutzen
+x-php-app: &php-app
+  build:
+    context: .
+    target: production
+  image: cooking-recipes-php:latest
+  networks:
+    - cooking
+
+services:
+
+  # Einmaliger Migrationslauf – muss vor dem Anwendungsstart durchlaufen sein
+  migrations:
+    <<: *php-app
+    restart: "no"
+    command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--allow-no-migration"]
+    environment:
+      <<: *php-env
+      # Nur für den allerersten Deploy nötig: Version20260409222000 legt damit
+      # den Admin-Benutzer an. Danach aus .env.deploy entfernen – das Geheimnis
+      # landet bewusst nicht in der Umgebung des laufenden php-Containers.
+      ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # PHP-FPM Anwendungsserver
+  php:
+    <<: *php-app
+    restart: unless-stopped
+    environment: *php-env
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "REQUEST_METHOD=GET SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Nginx Webserver – enthält public/ bereits im Image
+  nginx:
+    build:
+      context: .
+      target: nginx
+    image: cooking-recipes-nginx:latest
+    restart: unless-stopped
+    ports:
+      # Standardmäßig nur auf localhost, damit ausschließlich der vorgelagerte
+      # TLS-Proxy zugreift. Für Traefik/Coolify stattdessen deren Netz nutzen.
+      - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8080}:80"
+    depends_on:
+      php:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - cooking
+
+  # PostgreSQL Datenbank – bewusst ohne Port-Mapping nach außen
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER muss in .env.deploy gesetzt sein}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD muss in .env.deploy gesetzt sein}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB muss in .env.deploy gesetzt sein}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - cooking
+
+volumes:
+  postgres_data:
+
+networks:
+  cooking:
+    driver: bridge

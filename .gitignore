@@ -23,6 +23,11 @@
 /.claude/settings.local.json
 ###< claude code ###
 
+###> deployment ###
+# Zugangsdaten für compose.prod.yaml – nur .env.deploy.example gehört ins Repo
+/.env.deploy
+###< deployment ###
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
