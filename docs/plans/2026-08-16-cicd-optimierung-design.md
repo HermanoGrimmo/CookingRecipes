@@ -60,6 +60,8 @@ Kimai, Part-DB und Bolt liefern Software an Dritte aus und testen deshalb über 
 | E5 | CD-Ansatz: **GHCR + SSH-Pull** | Getestetes Artefakt = deploytes Artefakt; kein Build-Last auf dem VPS; Rollback in Sekunden |
 | E6 | Drei Workflows → ein `ci.yml` mit parallelen Jobs | Gemeinsame Trigger, Cache-Strategie und `concurrency`-Gruppe |
 | E7 | Keine PHP-/DB-Matrix | Eine Installation, fixierte Versionen (siehe Abgrenzung oben) |
+| E8 | **PostgreSQL 17** einheitlich in CI, dev und prod | Produktiv laufen noch keine Daten; lokal fällt lediglich ein Volume-Reset an |
+| E9 | PHP-CS-Fixer aus `vendor/` statt als Docker-Action | Verhindert Versions-Drift zwischen `bin/cs-fixer.sh` und CI (Abweichung von symfony/demo, siehe Plan) |
 
 ### Verworfene Alternativen
 
@@ -106,7 +108,7 @@ Der Branch-Filter auf `push` behebt die verdoppelten Runs (Fehler 1 aus Abschnit
 
 | Job | Inhalt | Status |
 |---|---|---|
-| `code-style` | PHP-CS-Fixer als Docker-Action (`ghcr.io/php-cs-fixer/php-cs-fixer:3-php8.4`), benötigt **kein** `composer install` | umgebaut |
+| `code-style` | PHP-CS-Fixer aus `vendor/` (siehe E9), Ausgabe über `cs2pr` | erweitert |
 | `static-analysis` | PHPStan Level 8, `--error-format=github`, mit Composer-Cache | erweitert |
 | `lint` | `composer validate --strict`, `lint:yaml config`, `lint:twig templates --env=prod`, `lint:container`, `doctrine:schema:validate --skip-sync`, `composer audit` – jeweils mit `if: always()` | **neu** |
 | `frontend` | Node 22, `npm ci` (mit `cache: npm`), `npm run build`, `npm audit` | **neu** |
@@ -206,7 +208,7 @@ Analog für den `nginx`-Service. Der Kommentarblock am Dateikopf (`up -d --build
 
 Aktuell dreifach uneinheitlich: CI `17`, `docker-compose.yml` `16-alpine`, `compose.prod.yaml` `16-alpine`. Da noch keine Produktionsdaten existieren, wird die Version **jetzt** einmalig festgelegt und an allen Stellen gleichgezogen – inklusive der `serverVersion=`-Parameter in `.env`, `docker-compose.yml` und `compose.prod.yaml`.
 
-> **Offener Punkt:** Zielversion festlegen. Empfehlung: PostgreSQL 17, da produktiv noch nichts läuft und lokal lediglich ein Volume-Reset anfällt.
+**Entschieden (E8): PostgreSQL 17.**
 
 ### 5.3 `feature/production-deployment` nach `main` bringen
 
@@ -246,5 +248,6 @@ Auf dem Server einmalig: Docker + Compose-Plugin, Verzeichnis `/opt/cooking-reci
 
 ## 8. Offene Punkte
 
-1. Zielversion PostgreSQL festlegen (Empfehlung: 17, siehe 5.2)
-2. Datenbank-Backup-Strategie für die Produktion – bewusst nicht Teil dieses Designs, aber vor dem ersten echten Deploy zu klären
+1. Datenbank-Backup-Strategie für die Produktion – bewusst nicht Teil dieses Designs, aber vor dem ersten echten Deploy zu klären
+
+Umsetzung siehe [2026-08-16-cicd-optimierung-plan.md](2026-08-16-cicd-optimierung-plan.md).
