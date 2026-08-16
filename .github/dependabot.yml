@@ -1,0 +1,27 @@
+version: 2
+
+updates:
+
+  # PHP-Abhängigkeiten
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Frontend-Abhängigkeiten (Webpack Encore, Stimulus)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Versionen der in .github/workflows und .github/actions genutzten Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Basis-Images aus dem Dockerfile
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
