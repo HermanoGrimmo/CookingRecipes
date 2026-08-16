@@ -497,6 +497,12 @@ Alle Schritte der neuen Jobs wurden vor dem Commit lokal im PHP-Container ausgef
 - `composer audit`: 42 Advisories in den gelockten Symfony-8.0-Paketen, darunter CVE-2026-45075 (high, HEAD-Request umgeht `methods: ['GET']` in `#[IsGranted]` / `#[IsCsrfTokenValid]`) und CRLF-Injection in `symfony/mime`. **Produktionsrelevant.** Behoben durch `composer update "symfony/*" --with-all-dependencies`; danach meldet Composer keine Advisories mehr. Der Schritt bleibt blockierend. Nebeneffekt: `bump-after-update: true` hat die Untergrenzen einiger Constraints auf die installierten Versionen angehoben – die `8.0.*`-Constraints der Symfony-Pakete blieben unberührt.
 - `npm audit`: 10 Funde (9 high), ausschließlich in `devDependencies` der Webpack-/Babel-Toolchain. Dieser Code läuft nie in Produktion, das Build-Ergebnis sind statische Assets. Der Schritt bekam `continue-on-error: true` mit Begründung im Workflow; das kann entfallen, sobald Dependabot den Bestand abgeräumt hat.
 
+**B5 – `variables_order` unterschied sich zwischen CI und Produktion.** Der erste CI-Lauf ließ den `tests`-Job an genau der Migration aus B1 scheitern, obwohl `ADMIN_INITIAL_PASSWORD` im Job-`env` gesetzt war. Ursache: Die Migration liest `$_ENV`, und ob echte Umgebungsvariablen dort landen, steuert die PHP-Direktive `variables_order`. Das offizielle `php`-Image lädt gar keine `php.ini` und nutzt damit PHPs eingebauten Default `EGPCS` – `$_ENV` ist befüllt. `shivammathur/setup-php` installiert dagegen eine `php.ini` mit `GPCS`; ohne `E` bleibt `$_ENV` leer.
+
+Die Composite Action setzt deshalb `ini-values: variables_order=EGPCS` und gleicht die CI an die Konfiguration des Produktions-Images an. Lokal reproduziert: mit `php -d variables_order=GPCS` scheitert die Migration exakt wie in CI, mit `EGPCS` läuft sie durch.
+
+> **Anmerkung:** Dass die Migration auf `$_ENV` statt auf `$_SERVER` oder `getenv()` zugreift, ist die eigentliche Fragilität. Der Zugriff funktioniert nur, solange `variables_order` ein `E` enthält. Eine Umstellung der Migration wäre robuster, wurde hier aber bewusst nicht vorgenommen – sie ist bereits produktiv gelaufen und gehört nicht in einen CI-Umbau.
+
 **Nicht erledigt und nicht aus dem Repo heraus erledigbar:** Schritt 1.4 (Branch-Protection auf die neuen Check-Namen umstellen).
 
 ---

@@ -19,6 +19,12 @@ runs:
         coverage: none
         extensions: ${{ inputs.extensions }}
         tools: cs2pr
+        # Das offizielle php-Image lädt keine php.ini und nutzt damit den
+        # eingebauten Default EGPCS, wodurch $_ENV befüllt ist. setup-php liefert
+        # dagegen eine php.ini mit "GPCS" aus – ohne E bleibt $_ENV leer und
+        # Version20260409222000 findet ADMIN_INITIAL_PASSWORD nicht. Hier wird die
+        # CI deshalb an die Konfiguration des Produktions-Images angeglichen.
+        ini-values: variables_order=EGPCS
 
     - name: Composer-Cache-Verzeichnis ermitteln
       id: composer-cache
